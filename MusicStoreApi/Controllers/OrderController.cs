@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MusicStoreApi.Handlers.Customers.Queries;
 using MusicStoreCore.Entities;
 using System.Net;
 
@@ -24,17 +25,21 @@ namespace MusicStoreApi.Controllers
 
         [HttpGet("all")]
         [ProducesResponseType(type: typeof(IEnumerable<Warehouse>), (int)HttpStatusCode.OK)]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return NoContent();
+            var orders = await _mediator.Send(new GetAllCustomers.Query());
+
+            return Ok(orders);
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(type: typeof( Order), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public IActionResult GetById(Guid Id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            return NoContent();
+            var order = await _mediator.Send(new GetCustomerById.Query { Id = id });
+
+            return order == null ? NotFound() : Ok(order);
         }
 
         [HttpPost]
