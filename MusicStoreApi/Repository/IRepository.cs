@@ -9,6 +9,8 @@ namespace MusicStoreApi.Repository
         T? GetById(Guid Id);
         void Insert(T entity);
         void Delete(T entity);
+        bool SaveChanges();
+
     }
 
 }

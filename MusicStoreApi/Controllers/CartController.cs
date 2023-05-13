@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MusicStoreApi.Handlers.Customers.Queries;
+using MusicStoreApi.Handlers.Carts.Commands;
+using MusicStoreApi.Handlers.Carts.Queries;
 using MusicStoreCore.Entities;
 using System.Net;
 
@@ -27,7 +28,7 @@ namespace MusicStoreApi.Controllers
         [ProducesResponseType(type: typeof(IEnumerable<Cart>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAll()
         {
-            var carts = await _mediator.Send(new GetAllCustomers.Query());
+            var carts = await _mediator.Send(new GetAllCarts.Query());
 
             return Ok(carts);
         }
@@ -37,7 +38,7 @@ namespace MusicStoreApi.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var cart = await _mediator.Send(new GetCustomerById.Query { Id = id });
+            var cart = await _mediator.Send(new GetCartById.Query { Id = id });
 
             return cart == null ? NotFound() : Ok(cart);
         }
@@ -60,9 +61,10 @@ namespace MusicStoreApi.Controllers
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public IActionResult Delete(Cart cart)
+        public async Task<IActionResult> Delete([FromBody] DeleteCart.Command request)
         {
-            return NoContent();
+            var response = await _mediator.Send(request);
+            return response ? NoContent() : NotFound();
         }
     }
 }

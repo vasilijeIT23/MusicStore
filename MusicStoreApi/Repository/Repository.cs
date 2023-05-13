@@ -24,6 +24,7 @@ namespace MusicStoreApi.Repository
         public virtual void Insert(T entity) => dbSet.Add(entity);
 
         public virtual void Delete(T entity) => dbSet.Remove(entity);
+        public virtual bool SaveChanges() => context.SaveChanges() > 0;
     }
 
 }

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MusicStoreApi.Handlers.Customers.Commands;
 using MusicStoreApi.Handlers.Customers.Queries;
 using MusicStoreCore.Entities;
 using System.Net;
@@ -60,9 +61,10 @@ namespace MusicStoreApi.Controllers
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public IActionResult Delete(Customer customer)
+        public async Task<IActionResult> Delete([FromBody] DeleteCustomer.Command request)
         {
-            return NoContent();
+            var response = await _mediator.Send(request);
+            return response ? NoContent() : NotFound();
         }
 
         [HttpPost("{customerId}/add/{cartId}")]

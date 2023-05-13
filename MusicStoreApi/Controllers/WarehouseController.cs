@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MusicStoreApi.Handlers.Customers.Queries;
+using MusicStoreApi.Handlers.Warehouses.Commands;
+using MusicStoreApi.Handlers.Warehouses.Queries;
 using MusicStoreCore.Entities;
 using System.Net;
 
@@ -27,7 +28,7 @@ namespace MusicStoreApi.Controllers
         [ProducesResponseType(type: typeof(IEnumerable<Warehouse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAll()
         {
-            var warehouses = await _mediator.Send(new GetAllCustomers.Query());
+            var warehouses = await _mediator.Send(new GetAllWarehouses.Query());
 
             return Ok(warehouses);
         }
@@ -37,7 +38,7 @@ namespace MusicStoreApi.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var warehouse = await _mediator.Send(new GetCustomerById.Query { Id = id });
+            var warehouse = await _mediator.Send(new GetWarehouseById.Query { Id = id });
 
             return warehouse == null ? NotFound() : Ok(warehouse);
         }
@@ -60,9 +61,10 @@ namespace MusicStoreApi.Controllers
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public IActionResult Delete(Warehouse warehouse)
+        public async Task<IActionResult> Delete([FromBody] DeleteWarehouse.Command request)
         {
-            return NoContent();
+            var response = await _mediator.Send(request);
+            return response ? NoContent() : NotFound();
         }
     }
 }

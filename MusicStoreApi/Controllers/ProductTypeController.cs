@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MusicStoreApi.Handlers.Customers.Queries;
+using MusicStoreApi.Handlers.ProductTypes.Queries;
+using MusicStoreApi.Handlers.ProductTypes.Commands;
 using MusicStoreCore.Entities;
 using System.Net;
 
@@ -27,7 +28,7 @@ namespace MusicStoreApi.Controllers
         [ProducesResponseType(type: typeof(IEnumerable<ProductType>), (int)HttpStatusCode.OK)]
         public  async Task<IActionResult> GetAll()
         {
-            var productTypes = await _mediator.Send(new GetAllCustomers.Query());
+            var productTypes = await _mediator.Send(new GetAllProductTypes.Query());
 
             return Ok(productTypes);
         }
@@ -37,7 +38,7 @@ namespace MusicStoreApi.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var productType = await _mediator.Send(new GetCustomerById.Query { Id = id });
+            var productType = await _mediator.Send(new GetProductTypeById.Query { Id = id });
 
             return productType == null ? NotFound() : Ok(productType);
         }
@@ -60,9 +61,10 @@ namespace MusicStoreApi.Controllers
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public IActionResult Delete(ProductType productType)
+        public async Task<IActionResult> Delete([FromBody] DeleteProductType.Command request)
         {
-            return NoContent();
+            var response = await _mediator.Send(request);
+            return response ? NoContent() : NotFound();
         }
     }
 }

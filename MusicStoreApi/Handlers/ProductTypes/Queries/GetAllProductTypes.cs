@@ -5,7 +5,7 @@ using MusicStoreCore.Entities;
 
 namespace MusicStoreApi.Handlers.ProductTypes.Queries
 {
-    public static class GetAllProductTypess
+    public static class GetAllProductTypes
     {
         [PublicAPI]
         public class Query : IRequest<IEnumerable<ProductType>> { }
