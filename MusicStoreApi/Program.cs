@@ -23,6 +23,7 @@ builder.Services.AddScoped<IRepository<Order>, OrderRepository>();
 builder.Services.AddScoped<IRepository<OrderItem>, OrderItemRepository>();
 builder.Services.AddScoped<IRepository<Warehouse>, WarehouseRepository>();
 builder.Services.AddScoped<IRepository<Stock>, StockRepository>();
+builder.Services.AddScoped<IRepository<Review>, ReviewRepository>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
