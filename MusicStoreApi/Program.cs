@@ -13,7 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MusicStoreContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MusicStore")));
 
-
 builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
 builder.Services.AddScoped<IRepository<ProductType>, ProductTypeRepository>();
 builder.Services.AddScoped<IRepository<Customer>, CustomerRepository>();
@@ -30,6 +29,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     //TODO remove this
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
 });
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddCors(options =>
 {

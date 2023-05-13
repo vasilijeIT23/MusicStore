@@ -1,28 +1,41 @@
-﻿using JetBrains.Annotations;
+﻿using AutoMapper;
+using JetBrains.Annotations;
 using MediatR;
-using MusicStoreApi.Exceptions;
 using MusicStoreApi.Repository;
 using MusicStoreCore.Entities;
+using MusicStoreApi.Exceptions;
 
 namespace MusicStoreApi.Handlers.Warehouses.Commands
 {
-    public static class CreateWarehouse
+    public static class UpdateWarehouse
     {
         [PublicAPI]
         public class Command : IRequest<Warehouse>
         {
+            public Guid Id { get; set; }
             public string Name { get; set; } = string.Empty;
             public int Capacity { get; set; }
+        }
+
+        [UsedImplicitly]
+        public class MappingProfile : Profile
+        {
+            public MappingProfile()
+            {
+                CreateMap<Command, Warehouse>();
+            }
         }
 
         [UsedImplicitly]
         public class RequestHandler : IRequestHandler<Command, Warehouse>
         {
             private readonly IRepository<Warehouse> _repository;
+            private readonly IMapper _mapper;
 
-            public RequestHandler(IRepository<Warehouse> repository)
+            public RequestHandler(IRepository<Warehouse> repository, IMapper mapper)
             {
-                _repository = repository;
+                _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+                _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             }
             public Task<Warehouse> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -31,13 +44,14 @@ namespace MusicStoreApi.Handlers.Warehouses.Commands
                     throw new InvalidInputValueException();
                 }
 
-                Warehouse warehouse = new Warehouse()
-                {
-                    Name = request.Name,
-                    Capacity = request.Capacity
-                };
+                var warehouse = _repository.GetById(request.Id);
 
-                _repository.Create(warehouse);
+                if (warehouse == null)
+                {
+                    throw new EntityDoesntExistException(request);
+                }
+
+                _mapper.Map(request, warehouse);
                 _repository.SaveChanges();
 
                 return Task.FromResult(warehouse);

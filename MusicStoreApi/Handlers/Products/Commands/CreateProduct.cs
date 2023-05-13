@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 using MediatR;
-using MovieStoreApi.Exceptions;
+using MusicStoreApi.Exceptions;
 using MusicStoreApi.Repository;
 using MusicStoreCore.Entities;
 using MusicStoreCore.Enums;
@@ -13,9 +13,8 @@ namespace MusicStoreApi.Handlers.Products.Commands
         public class Command : IRequest<Product>
         {
             public string Name { get; set; } = string.Empty!;
-            public bool InStock { get; set; }
             public double Price { get; set; }
-            public Guid ProductTypeId { get; set; }
+            public Guid ProductType { get; set; }
 
         }
 
@@ -42,20 +41,14 @@ namespace MusicStoreApi.Handlers.Products.Commands
                     throw new InvalidInputValueException();
                 }
 
-                var productType = _productTypeRepository.GetById(request.ProductTypeId);
+                var productType = _productTypeRepository.GetById(request.ProductType);
 
                 if (productType == null)
                 {
                     throw new InvalidInputValueException();
                 }
 
-                Product product = new Product()
-                {
-                    Name = request.Name,
-                    InStock= request.InStock,
-                    Price = request.Price,
-                    ProductType = productType,
-                };
+                var product = new Product(request.Name, request.Price, productType);
 
                 _productRepository.Create(product);
                 _productRepository.SaveChanges();

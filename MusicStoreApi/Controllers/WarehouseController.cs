@@ -54,9 +54,11 @@ namespace MusicStoreApi.Controllers
         [HttpPut]
         [ProducesResponseType(type: typeof(Warehouse), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public IActionResult Update(Warehouse warehouse)
+        public async Task<IActionResult> Update([FromBody] UpdateWarehouse.Command request)
         {
-            return NoContent();
+            var response = await _mediator.Send(request);
+
+            return response == null ? NoContent() : NotFound();
         }
 
         [HttpDelete]

@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 using MediatR;
-using MovieStoreApi.Exceptions;
+using MusicStoreApi.Exceptions;
 using MusicStoreApi.Repository;
 using MusicStoreCore.Entities;
 using MusicStoreCore.Enums;

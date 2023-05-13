@@ -45,17 +45,22 @@ namespace MusicStoreApi.Controllers
 
         [HttpPost]
         [ProducesResponseType(type: typeof(Customer), (int)HttpStatusCode.OK)]
-        public IActionResult Create(Customer customer)
+        public async Task<IActionResult> Create([FromBody] CreateCustomer.Command request)
         {
-            return NoContent();
+            var result = await _mediator.Send(request);
+
+            return Ok(result);
         }
 
         [HttpPut]
         [ProducesResponseType(type: typeof(Customer), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public IActionResult Update(Customer customer)
+        public async Task<IActionResult> Update([FromBody] UpdateCustomer.Command request)
         {
-            return NoContent();
+            var response = await _mediator.Send(request);
+            //todo add notfound somehow
+
+            return Ok(response);
         }
 
         [HttpDelete]
@@ -108,6 +113,15 @@ namespace MusicStoreApi.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Promote([FromRoute] Guid id)
+        {
+            return NoContent();
+        }
+
+        [HttpPost("{customerId}/review/{productId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public IActionResult ReviewProduct([FromRoute] Guid customerId, [FromRoute] Guid productId)
         {
             return NoContent();
         }

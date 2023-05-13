@@ -15,6 +15,9 @@ namespace MusicStoreInfrastructure
             builder.Property(p => p.Price)
                 .IsRequired();
 
+            builder.HasMany(p => p.Reviews)
+                .WithOne(p => p.Product);
+
         }
 
     }

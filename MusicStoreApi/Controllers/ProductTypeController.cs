@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MusicStoreApi.Handlers.ProductTypes.Queries;
 using MusicStoreApi.Handlers.ProductTypes.Commands;
+using MusicStoreApi.Handlers.ProductTypes.Queries;
 using MusicStoreCore.Entities;
 using System.Net;
 
@@ -26,7 +26,7 @@ namespace MusicStoreApi.Controllers
 
         [HttpGet("all")]
         [ProducesResponseType(type: typeof(IEnumerable<ProductType>), (int)HttpStatusCode.OK)]
-        public  async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll()
         {
             var productTypes = await _mediator.Send(new GetAllProductTypes.Query());
 
@@ -45,17 +45,20 @@ namespace MusicStoreApi.Controllers
 
         [HttpPost]
         [ProducesResponseType(type: typeof(ProductType), (int)HttpStatusCode.OK)]
-        public IActionResult Create(ProductType productType )
+        public async Task<IActionResult> Create([FromBody] CreateProductType.Command request)
         {
-            return NoContent();
+            var result = await _mediator.Send(request);
+            return Ok(result);
         }
 
         [HttpPut]
         [ProducesResponseType(type: typeof(ProductType), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public IActionResult Update(ProductType productType)
+        public async Task<IActionResult> Update([FromBody] UpdateProductType.Command request)
         {
-            return NoContent();
+            var response = await _mediator.Send(request);
+
+            return response == null ? NoContent() : NotFound();
         }
 
         [HttpDelete]

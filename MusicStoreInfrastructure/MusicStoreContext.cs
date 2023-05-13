@@ -19,7 +19,8 @@ namespace MusicStoreInfrastructure
         DbSet<Cart> Carts { get; set; }
         DbSet<CartItem> CartItems { get; set; }
         DbSet<Order> Orders { get; set; }
-        DbSet<OrderItem> orderItems { get; set; }
+        DbSet<OrderItem> OrderItems { get; set; }
+        DbSet<Review> Reviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

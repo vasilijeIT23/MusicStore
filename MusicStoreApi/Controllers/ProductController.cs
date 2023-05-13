@@ -9,7 +9,7 @@ namespace MusicStoreApi.Controllers
 {
     [ApiController]
     [Route("api/products")]
-    public class ProductController : ControllerBase 
+    public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;
         public ProductController(IMediator mediator)
@@ -45,17 +45,20 @@ namespace MusicStoreApi.Controllers
 
         [HttpPost]
         [ProducesResponseType(type: typeof(Product), (int)HttpStatusCode.OK)]
-        public IActionResult Create(Product product)
+        public async Task<IActionResult> Create([FromBody] CreateProduct.Command request)
         {
-            return NoContent();
+            var result = await _mediator.Send(request);
+            return Ok(result);
         }
 
         [HttpPut]
         [ProducesResponseType(type: typeof(Product), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public IActionResult Update(Product product)
+        public async Task<IActionResult> Update([FromBody] UpdateProduct.Command request)
         {
-            return NoContent();
+            var response = await _mediator.Send(request);
+
+            return response == null ? NoContent() : NotFound();
         }
 
         [HttpDelete]

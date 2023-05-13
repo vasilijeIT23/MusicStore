@@ -1,4 +1,4 @@
-﻿namespace MovieStoreApi.Exceptions
+﻿namespace MusicStoreApi.Exceptions
 {
     public class InvalidInputValueException : Exception
     {

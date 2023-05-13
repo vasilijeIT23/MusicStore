@@ -25,6 +25,10 @@ namespace MusicStoreInfrastructure
 
             builder.HasMany(c => c.Orders)
                 .WithOne(c => c.Customer);
+
+            builder.HasMany(c => c.Reviews)
+                .WithOne(c => c.Customer);
+
         }
     }
 }
