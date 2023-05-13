@@ -9,5 +9,17 @@ namespace MusicStoreCore.Entities
         public Product Product { get; set; } = null!;
         public Grade Grade { get; set; }
         public string Description { get; set; } = string.Empty;
+
+        public Review()
+        {
+        }
+
+        public Review(Customer customer, Product product, Grade grade, string description)
+        {
+            Customer = customer;
+            Product = product;
+            Grade = grade;
+            Description = description;
+        }
     }
 }

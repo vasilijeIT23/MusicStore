@@ -13,5 +13,14 @@ namespace MusicStoreCore.Entities
         public Warehouse Warehouse { get; set; } = null!;
         public int Quantity { get; set; }
 
+
+        public Stock() { }
+
+        public Stock(Product product, Warehouse warehouse, int quantity)
+        {
+            Product = product;
+            Warehouse = warehouse;
+            Quantity = quantity;
+        }
     }
 }

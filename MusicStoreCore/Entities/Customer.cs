@@ -16,7 +16,7 @@ namespace MusicStoreCore.Entities
         public IList<Order> Orders { get; set; }
         public IList<Review> Reviews { get; set; }
 
-
+        public Customer() { }
         public Customer(string firstName, string lastName, string email)
         {
             FirstName = firstName;
