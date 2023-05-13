@@ -18,11 +18,13 @@ namespace MusicStoreApi.Handlers.Customers.Commands
         [UsedImplicitly]
         public class RequestHandler : IRequestHandler<Command, Customer>
         {
-            private readonly IRepository<Customer> _repository;
+            private readonly IRepository<Customer> _customerRepository;
+            private readonly IRepository<Cart> _cartRepository;
 
-            public RequestHandler(IRepository<Customer> repository)
+            public RequestHandler(IRepository<Customer> customerRepository, IRepository<Cart> cartRepository)
             {
-                _repository = repository;
+                _customerRepository = customerRepository;
+                _cartRepository = cartRepository;
             }
             public Task<Customer> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -31,7 +33,7 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                     throw new ArgumentNullException(nameof(request));
                 }
 
-                var existingCustomer = _repository.Find(x => x.Email == request.Email).SingleOrDefault();
+                var existingCustomer = _customerRepository.Find(x => x.Email == request.Email).SingleOrDefault();
 
                 if (existingCustomer != null)
                 {
@@ -40,8 +42,14 @@ namespace MusicStoreApi.Handlers.Customers.Commands
 
                 var customer = new Customer(request.FirstName, request.LastName, request.Email);
 
-                _repository.Create(customer);
-                _repository.SaveChanges();
+                _customerRepository.Create(customer);
+                _customerRepository.SaveChanges();
+
+                var cart = new Cart(customer);
+
+                _cartRepository.Create(cart);
+                _cartRepository.SaveChanges();
+
                 return Task.FromResult(customer);
             }
         }

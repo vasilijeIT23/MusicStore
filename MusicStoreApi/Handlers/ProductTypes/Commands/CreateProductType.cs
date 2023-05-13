@@ -37,11 +37,7 @@ namespace MusicStoreApi.Handlers.ProductTypes.Commands
                     throw new InvalidInputValueException();
                 }
 
-                ProductType productType = new ProductType()
-                {
-                    Name = request.Name,
-                    Category = request.Category
-                };
+                var productType = new ProductType(request.Category, request.Name);
 
                 _repository.Create(productType);
                 _repository.SaveChanges();

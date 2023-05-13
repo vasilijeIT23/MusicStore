@@ -31,11 +31,7 @@ namespace MusicStoreApi.Handlers.Warehouses.Commands
                     throw new InvalidInputValueException();
                 }
 
-                Warehouse warehouse = new Warehouse()
-                {
-                    Name = request.Name,
-                    Capacity = request.Capacity
-                };
+                var warehouse = new Warehouse(request.Name, request.Capacity);
 
                 _repository.Create(warehouse);
                 _repository.SaveChanges();

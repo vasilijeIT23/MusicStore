@@ -9,8 +9,8 @@ namespace MusicStoreApi.Repository
     {
         public CartRepository(MusicStoreContext context) : base(context) { }
 
-        public override IEnumerable<Cart> GetAll() => dbSet.Include(x => x.CartItems);
-        public override Cart? GetById(Guid id) => dbSet.Include(x => x.CartItems).FirstOrDefault(x => x.Id == id);
-        public override IEnumerable<Cart> Find(Expression<Func<Cart, bool>> predicate) => dbSet.Include(x => x. CartItems).Where(predicate);
+        public override IEnumerable<Cart> GetAll() => dbSet.Include(x => x.Customer).Include(x => x.CartItems);
+        public override Cart? GetById(Guid id) => dbSet.Include(x => x.Customer).Include(x => x.CartItems).FirstOrDefault(x => x.Id == id);
+        public override IEnumerable<Cart> Find(Expression<Func<Cart, bool>> predicate) => dbSet.Include(x => x.Customer).Include(x => x. CartItems).Where(predicate);
     }
 }
