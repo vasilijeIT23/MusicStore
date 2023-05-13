@@ -21,7 +21,7 @@ namespace MusicStoreApi.Repository
 
         public virtual T? GetById(Guid id) => dbSet.Find(id);
 
-        public virtual void Insert(T entity) => dbSet.Add(entity);
+        public virtual void Create(T entity) => dbSet.Add(entity);
 
         public virtual void Delete(T entity) => dbSet.Remove(entity);
         public virtual bool SaveChanges() => context.SaveChanges() > 0;

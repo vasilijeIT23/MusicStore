@@ -45,9 +45,10 @@ namespace MusicStoreApi.Controllers
 
         [HttpPost]
         [ProducesResponseType(type: typeof(Warehouse), (int)HttpStatusCode.OK)]
-        public IActionResult Create(Warehouse warehouse)
+        public async Task<IActionResult> Create([FromBody] CreateWarehouse.Command request)
         {
-            return NoContent();
+            var result = await _mediator.Send(request);
+            return Ok(result);
         }
 
         [HttpPut]
