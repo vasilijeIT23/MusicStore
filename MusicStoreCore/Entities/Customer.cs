@@ -25,7 +25,7 @@ namespace MusicStoreCore.Entities
             Status = Status.Regular;
             Role = Role.Regular;
             StatusExpirationDate = null;
-            MoneySpent = 0;
+            MoneySpent = 0.0d;
             Orders = new List<Order>();
             Reviews = new List<Review>();
         }

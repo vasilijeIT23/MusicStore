@@ -50,7 +50,7 @@ namespace MusicStoreApi.Handlers.Products.Commands
 
                 if (product == null)
                 {
-                    throw new EntityDoesntExistException(request);
+                    throw new EntityDoesntExistException();
                 }
 
                 _mapper.Map(request, product);

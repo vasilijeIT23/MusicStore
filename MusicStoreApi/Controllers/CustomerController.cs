@@ -72,49 +72,59 @@ namespace MusicStoreApi.Controllers
             return response ? NoContent() : NotFound();
         }
 
-        [HttpPost("{customerId}/add/{cartId}")]
+        [HttpPost("{customerId}/add/{productId}/to/{cartId}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult AddToCart(Customer customer) 
+        public async Task<IActionResult> AddToCart([FromBody]AddToCart.Command request) 
         {
-            return NoContent();
+            var response = await _mediator.Send(request);
+
+            return response == null ? BadRequest() : Ok(response);
         }
 
-        [HttpPut("{customerId}/remove/{cartId}")]
+        [HttpPut("{customerId}/emptyCart/{cartId}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult EmptyCart(Cart cart)
+        public async Task<IActionResult> EmptyCart([FromBody]EmptyCart.Command request)
         {
-            return NoContent();
+            var result = await _mediator.Send(request);
+
+            return result ? Ok(result) : BadRequest();
         }
 
-        [HttpPut("{customerId}/removeItem/{cartItemId}")]
+        [HttpPut("{customerId}/removeCartItem/{cartItemId}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult RemoveFromCart(Cart cart)
+        public async Task<IActionResult> RemoveFromCart([FromBody] RemoveCartItem.Command request)
         {
-            return NoContent();
+            var response = await _mediator.Send(request);
+
+            return response? Ok(response) : BadRequest();
         }
 
         [HttpPost("{customerId}/purchase/{cartId}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult PurchaseProduct([FromRoute] Guid customerId, [FromRoute] Guid cartId)
+        public async Task<IActionResult> PurchaseProduct([FromBody] PurchaseFromCart.Command request)
         {
-            return NoContent();
+            var response = await _mediator.Send(request);
+
+            return response == null ? Ok(response) : BadRequest();
         }
 
         [HttpPut("{id}/promote")]
         [ProducesResponseType(type: typeof(Customer), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult Promote([FromRoute] Guid id)
+        public async Task<IActionResult> Promote([FromBody] PromoteCustomer.Command request)
         {
-            return NoContent();
+            var response = await _mediator.Send(request);
+
+            return response == null ? BadRequest() : Ok(response);
         }
 
         [HttpPost("{customerId}/review/{productId}")]

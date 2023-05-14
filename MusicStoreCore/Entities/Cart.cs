@@ -12,7 +12,7 @@
         public Cart(Customer customer)
         {
             Customer = customer;
-            CartValue = 0;
+            CartValue = 0.0d;
             CartItems= new List<CartItem>();
         }
     }

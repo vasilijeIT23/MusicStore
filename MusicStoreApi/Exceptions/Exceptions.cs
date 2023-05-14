@@ -7,16 +7,16 @@
 
     public class EntityDoesntExistException : Exception
     {
-        public EntityDoesntExistException(object o) : base(String.Format("Entity with given id doesnt exist. " + o)) { }
+        public EntityDoesntExistException() : base(String.Format("Entity with given id doesnt exist. ")) { }
     }
 
     public class MovieDoesntExistException : Exception
     {
-        public MovieDoesntExistException(object o) : base(String.Format("Entity with given id doesnt exist. " + o)) { }
+        public MovieDoesntExistException() : base(String.Format("Entity with given id doesnt exist. ")) { }
     }
 
     public class RequirementsNotSatisfiedException : Exception
     {
-        public RequirementsNotSatisfiedException(object o) : base(String.Format("Entity doesnt satisfy requirements needed for this action to be succesfully completed. " + o)) { }
+        public RequirementsNotSatisfiedException() : base(String.Format("Entity doesnt satisfy requirements needed for this action to be succesfully completed. ")) { }
     }
 }

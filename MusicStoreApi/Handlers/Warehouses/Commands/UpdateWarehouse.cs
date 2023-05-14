@@ -48,7 +48,7 @@ namespace MusicStoreApi.Handlers.Warehouses.Commands
 
                 if (warehouse == null)
                 {
-                    throw new EntityDoesntExistException(request);
+                    throw new EntityDoesntExistException();
                 }
 
                 _mapper.Map(request, warehouse);

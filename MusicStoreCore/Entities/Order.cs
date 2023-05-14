@@ -10,11 +10,11 @@
 
         public Order() { }  
 
-        public Order(Customer customer, double price)
+        public Order(Customer customer)
         {
             Customer = customer;
             OrderDate = DateTime.Now;
-            Price = price;
+            Price = 0;
             OrderItems = new List<OrderItem>();
         }
     }
