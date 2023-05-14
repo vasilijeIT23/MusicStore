@@ -16,11 +16,13 @@ namespace MusicStoreApi.Handlers.Products.Commands
         [UsedImplicitly]
         public class RequestHandler : IRequestHandler<Command, bool>
         {
-            private readonly IRepository<Product> _repository;
+            private readonly IRepository<Product> _productRepository;
+            private readonly IRepository<Stock> _stockRepository;
 
-            public RequestHandler(IRepository<Product> repository)
+            public RequestHandler(IRepository<Product> productRepository, IRepository<Stock> stockRepository)
             {
-                _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+                _productRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
+                _stockRepository = stockRepository ?? throw new ArgumentNullException(nameof(stockRepository)); 
             }
 
             public Task<bool> Handle(Command request, CancellationToken cancellationToken)
@@ -30,15 +32,19 @@ namespace MusicStoreApi.Handlers.Products.Commands
                     throw new ArgumentNullException(nameof(request));
                 }
 
-                var product = _repository.GetById(request.Id) ?? throw new ArgumentNullException(nameof(request));
+                var product = _productRepository.GetById(request.Id) ?? throw new ArgumentNullException(nameof(request));
+                var stock = _stockRepository.Find(x =>x.Product.Id == request.Id).SingleOrDefault();
 
-                if (product == null)
+                if (product == null || stock == null)
                 {
                     return Task.FromResult(false);
                 }
 
-                _repository.Delete(product);
-                _repository.SaveChanges();
+                _productRepository.Delete(product);
+                _stockRepository.Delete(stock);
+
+                _productRepository.SaveChanges();
+                _stockRepository.SaveChanges();
 
                 return Task.FromResult(true);
             }

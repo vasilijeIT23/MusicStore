@@ -23,11 +23,16 @@ namespace MusicStoreApi.Handlers.Products.Commands
         {
             private readonly IRepository<Product> _productRepository;
             private readonly IRepository<ProductType> _productTypeRepository;
+            private readonly IRepository<Stock> _stockRepository;
+            private readonly IRepository<Warehouse> _warehouseRepository;
 
-            public RequestHandler(IRepository<Product> productRepository, IRepository<ProductType> productTypeRepository)
+
+            public RequestHandler(IRepository<Product> productRepository, IRepository<ProductType> productTypeRepository, IRepository<Stock> stockRepository, IRepository<Warehouse> warehouseRepository)
             {
                 _productRepository = productRepository;
                 _productTypeRepository = productTypeRepository;
+                _stockRepository = stockRepository;
+                _warehouseRepository = warehouseRepository;
             }
             public Task<Product> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -42,16 +47,20 @@ namespace MusicStoreApi.Handlers.Products.Commands
                 }
 
                 var productType = _productTypeRepository.GetById(request.ProductType);
+                var warehouse = _warehouseRepository.GetAll().SingleOrDefault();
 
-                if (productType == null)
+                if (productType == null || warehouse == null)
                 {
                     throw new InvalidInputValueException();
                 }
 
                 var product = new Product(request.Name, request.Price, productType);
+                var stock = new Stock(product, warehouse, 100);
 
                 _productRepository.Create(product);
+                _stockRepository.Create(stock);
                 _productRepository.SaveChanges();
+                _stockRepository.SaveChanges();
 
                 return Task.FromResult(product);
             }
