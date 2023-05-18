@@ -1,0 +1,48 @@
+<!-- <nav class="nav-bar">
+  <a routerLink="customers" routerLinkActive="active"
+    ariaCurrentWhenActive="page"><button mat-flat-button class="button">Customers</button></a>
+  <a routerLink="products" routerLinkActive="active" ariaCurrentWhenActive="page"><button class="button">Products</button></a>
+  <a routerLink="cart" routerLinkActive="active" ariaCurrentWhenActive="page"><button class="button">Cart</button></a>
+  <a routerLink="store" routerLinkActive="active" ariaCurrentWhenActive="page"><button class="button">Store</button></a>
+</nav> -->
+
+<!-- <nav mat-tab-nav-bar [tabPanel]="tabPanel">
+  <a mat-tab-link *ngFor="let type of myMap | keyvalue"> 
+    <a routerLink={{type.value}} routerLinkActive="active" ariaCurrentWhenActive="page">    {{type.value}}</a>
+  </a>
+</nav>
+<mat-tab-nav-panel #tabPanel></mat-tab-nav-panel> -->
+
+<!-- <nav mat-tab-nav-bar [tabPanel]="tabPanel">
+  <a mat-tab-link class="tab" *ngFor="let type of myMap | keyvalue" (click)="redirect(type.value)">{{type.key}}</a>
+</nav>
+<mat-tab-nav-panel #tabPanel></mat-tab-nav-panel> -->
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<mat-sidenav-container class="side-nav-container">
+  <mat-sidenav opened mode="side">
+    <!-- Add your sidenav content here -->
+    <mat-nav-list *ngIf="isCustomer">
+      <p>Customer view</p>
+      <a mat-list-item routerLink="/customers">Profile</a>
+      <a mat-list-item routerLink="/products">Products</a>
+      <a mat-list-item routerLink="/cart">My cart</a>
+      <!-- Add more menu items as needed -->
+    </mat-nav-list>
+    <mat-nav-list *ngIf="isManager">
+      <p>Manager view</p>
+      <a mat-list-item routerLink="/customers">Profile</a>
+      <a mat-list-item routerLink="/products">Products</a>
+      <a mat-list-item routerLink="/warehouses">Warehouse</a>
+      <a mat-list-item routerLink="/stock">Stock</a>
+      <a mat-list-item routerLink="/productTypes">Product types</a>
+      <!-- Add more menu items as needed -->
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+

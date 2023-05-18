@@ -1,0 +1,33 @@
+<form [formGroup]="formGroup">
+  <mat-form-field>
+    <mat-label for="firstName">First name: </mat-label>
+    <input matInput id="firstName" type="text" formControlName="firstName">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label for="lastName">Last name: </mat-label>
+    <input matInput id="lastName" type="text" formControlName="lastName">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label for="email">Email: </mat-label>
+    <input matInput id="email" type="email" formControlName="email" placeholder="Ex. pat@example.com">
+    <mat-error *ngIf="formGroup.get('email')?.hasError('email') && !formGroup.get('email')?.hasError('required')">
+      Please enter a valid email address
+    </mat-error>
+    <mat-error *ngIf="formGroup.get('email')?.hasError('required')">
+      Email is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Role:</mat-label>
+    <mat-select formControlName="role">
+      <mat-option *ngFor="let type of role | keyvalue" [value]="type.key">
+        {{ type.value }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-button type="submit" [disabled]="formGroup.invalid" (click)="onSubmit()">Submit</button>
+</form>
