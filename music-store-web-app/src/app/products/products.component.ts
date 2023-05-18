@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Product, ProductClient } from '../api/api-reference';
+import { DeleteProductCommand, Product, ProductClient } from '../api/api-reference';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'inStock', 'price'];
+  displayedColumns: string[] = ['name', 'inStock', 'price', 'actions'];
 
   products: Product[] = [];
   
@@ -18,5 +18,15 @@ export class ProductsComponent implements OnInit {
     this.client.getAll().subscribe(result => {
       this.products = result;
     });
+  }
+
+  onDelete(query: DeleteProductCommand){
+    this.client.delete(query).subscribe(_ => {
+      this.products = this.products.filter(x => x.id !== query.id)
+    })
+  }
+
+  onUpdate(product: Product) {
+    this.router.navigate([`products/edit/${product.id}`]);
   }
 }

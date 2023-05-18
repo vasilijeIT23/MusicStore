@@ -3960,7 +3960,6 @@ export class UpdateProductCommand implements IUpdateProductCommand {
     name?: string;
     inStock?: boolean;
     price?: number;
-    productType?: ProductType;
 
     constructor(data?: IUpdateProductCommand) {
         if (data) {
@@ -3977,7 +3976,6 @@ export class UpdateProductCommand implements IUpdateProductCommand {
             this.name = _data["name"];
             this.inStock = _data["inStock"];
             this.price = _data["price"];
-            this.productType = _data["productType"] ? ProductType.fromJS(_data["productType"]) : <any>undefined;
         }
     }
 
@@ -3994,7 +3992,6 @@ export class UpdateProductCommand implements IUpdateProductCommand {
         data["name"] = this.name;
         data["inStock"] = this.inStock;
         data["price"] = this.price;
-        data["productType"] = this.productType ? this.productType.toJSON() : <any>undefined;
         return data;
     }
 }
@@ -4004,7 +4001,6 @@ export interface IUpdateProductCommand {
     name?: string;
     inStock?: boolean;
     price?: number;
-    productType?: ProductType;
 }
 
 export class DeleteProductCommand implements IDeleteProductCommand {

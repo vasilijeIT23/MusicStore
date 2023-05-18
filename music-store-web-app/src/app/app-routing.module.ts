@@ -9,11 +9,13 @@ import { StockComponent } from './stock/stock.component';
 import { CartComponent } from './cart/cart.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { EditCustomerComponent } from './customers/edit-customer/edit-customer.component';
+import { EditProductComponent } from './products/edit-product/edit-product.component';
 
 const routes: Routes = [
   { path: 'customers', component: CustomersComponent},
   { path: 'customers/edit/:id', component: EditCustomerComponent},
   { path: 'products', component: ProductsComponent},
+  { path: 'products/edit/:id', component: EditProductComponent},
   { path: 'warehouses', component: WarehousesComponent},
   { path: 'stock', component: StockComponent},
   { path: 'cart', component: CartComponent},

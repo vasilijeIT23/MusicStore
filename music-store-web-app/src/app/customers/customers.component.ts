@@ -11,7 +11,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
   styleUrls: ['./customers.component.css']
 })
 export class CustomersComponent implements OnInit {
-  @ViewChild('menuTrigger') menuTrigger?: MatMenuTrigger;
   
   displayedColumns: string[] = ['firstName', 'lastName', 'email', 'role', 'status', 'statusExpirationDate', 'moneySpent', 'actions'];
 
@@ -22,14 +21,6 @@ export class CustomersComponent implements OnInit {
     this.client.getAll().subscribe(result => {
       this.customers = result;
     });
-  }
-
-  openDialog() {
-    const dialogRef = this.dialog.open(EditCustomerComponent, {restoreFocus: false});
-
-    // Manually restore focus to the menu trigger since the element that
-    // opens the dialog won't be in the DOM any more when the dialog closes.
-    //sdialogRef.afterClosed().subscribe(() => this.menuTrigger.focus());
   }
 
   onDelete(query: DeleteCustomerCommand){

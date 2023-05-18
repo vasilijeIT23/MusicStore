@@ -58,7 +58,7 @@ namespace MusicStoreApi.Controllers
         {
             var response = await _mediator.Send(request);
 
-            return response == null ? NoContent() : NotFound();
+            return response != null ? NoContent() : NotFound();
         }
 
         [HttpDelete]

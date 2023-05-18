@@ -17,7 +17,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatListModule} from '@angular/material/list';
 import { EditCustomerComponent } from './customers/edit-customer/edit-customer.component';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatButtonModule} from '@angular/material/button';
 import{MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
@@ -29,6 +29,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { MatCardModule} from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { EditProductComponent } from './products/edit-product/edit-product.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     StockComponent,
     CartComponent,
     PageNotFoundComponent,
-    EditCustomerComponent
+    EditCustomerComponent,
+    EditProductComponent
   ],
   imports: [
     BrowserModule,
@@ -65,7 +67,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatOptionModule,
     MatDialogModule
   ],
-  providers: [],
+  providers: [
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

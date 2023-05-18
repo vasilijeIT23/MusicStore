@@ -16,7 +16,6 @@ namespace MusicStoreApi.Handlers.Products.Commands
             public string Name { get; set; } = string.Empty;
             public bool InStock { get; set; }
             public double Price { get; set; }
-            public ProductType ProductType { get; set; } = null!;
         }
 
         [UsedImplicitly]
