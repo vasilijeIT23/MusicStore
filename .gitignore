@@ -404,3 +404,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/music-store-web-app/.angular/cache/16.0.2
