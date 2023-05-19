@@ -2993,6 +2993,9 @@ export class Customer implements ICustomer {
     status?: Status;
     statusExpirationDate?: Date | undefined;
     moneySpent?: number;
+    username?: string;
+    password?: string;
+    salt?: string;
     orders?: Order[];
     reviews?: Review[];
 
@@ -3015,6 +3018,9 @@ export class Customer implements ICustomer {
             this.status = _data["status"];
             this.statusExpirationDate = _data["statusExpirationDate"] ? new Date(_data["statusExpirationDate"].toString()) : <any>undefined;
             this.moneySpent = _data["moneySpent"];
+            this.username = _data["username"];
+            this.password = _data["password"];
+            this.salt = _data["salt"];
             if (Array.isArray(_data["orders"])) {
                 this.orders = [] as any;
                 for (let item of _data["orders"])
@@ -3045,6 +3051,9 @@ export class Customer implements ICustomer {
         data["status"] = this.status;
         data["statusExpirationDate"] = this.statusExpirationDate ? this.statusExpirationDate.toISOString() : <any>undefined;
         data["moneySpent"] = this.moneySpent;
+        data["username"] = this.username;
+        data["password"] = this.password;
+        data["salt"] = this.salt;
         if (Array.isArray(this.orders)) {
             data["orders"] = [];
             for (let item of this.orders)
@@ -3068,6 +3077,9 @@ export interface ICustomer {
     status?: Status;
     statusExpirationDate?: Date | undefined;
     moneySpent?: number;
+    username?: string;
+    password?: string;
+    salt?: string;
     orders?: Order[];
     reviews?: Review[];
 }
@@ -3515,6 +3527,8 @@ export class CreateCustomerCommand implements ICreateCustomerCommand {
     firstName?: string;
     lastName?: string;
     email?: string;
+    username?: string;
+    password?: string;
 
     constructor(data?: ICreateCustomerCommand) {
         if (data) {
@@ -3530,6 +3544,8 @@ export class CreateCustomerCommand implements ICreateCustomerCommand {
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
+            this.username = _data["username"];
+            this.password = _data["password"];
         }
     }
 
@@ -3545,6 +3561,8 @@ export class CreateCustomerCommand implements ICreateCustomerCommand {
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
+        data["username"] = this.username;
+        data["password"] = this.password;
         return data;
     }
 }
@@ -3553,6 +3571,8 @@ export interface ICreateCustomerCommand {
     firstName?: string;
     lastName?: string;
     email?: string;
+    username?: string;
+    password?: string;
 }
 
 export class UpdateCustomerCommand implements IUpdateCustomerCommand {

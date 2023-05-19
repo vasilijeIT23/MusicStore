@@ -29,7 +29,7 @@ namespace MusicStoreInfrastructure
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             //customers
-            modelBuilder.Entity<Customer>().HasData(new
+            /*modelBuilder.Entity<Customer>().HasData(new
             {
                 Id = Guid.NewGuid(),
                 FirstName = "Marko",
@@ -55,7 +55,7 @@ namespace MusicStoreInfrastructure
                 MoneySpent = 0.0d,
                 Orders = new List<Order>(),
                 Reviews = new List<Review>()
-            });
+            });*/
 
             //warehouse
             modelBuilder.Entity<Warehouse>().HasData(new

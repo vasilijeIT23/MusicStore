@@ -13,6 +13,8 @@ namespace MusicStoreApi.Handlers.Customers.Commands
             public string FirstName { get; set; } = string.Empty;
             public string LastName { get; set; } = string.Empty;
             public string Email { get; set; } = string.Empty;
+            public string Username { get; set; } = string.Empty;
+            public string Password { get; set; } = string.Empty;
         }
 
         [UsedImplicitly]
@@ -33,14 +35,14 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                     throw new ArgumentNullException(nameof(request));
                 }
 
-                var existingCustomer = _customerRepository.Find(x => x.Email == request.Email).SingleOrDefault();
+                var existingCustomer = _customerRepository.Find(x => x.Email == request.Email || x.Username == request.Username).SingleOrDefault();
 
                 if (existingCustomer != null)
                 {
                     return Task.FromResult(existingCustomer);
                 }
 
-                var customer = new Customer(request.FirstName, request.LastName, request.Email);
+                var customer = new Customer(request.FirstName, request.LastName, request.Email, request.Username, request.Password);
 
                 _customerRepository.Create(customer);
                 _customerRepository.SaveChanges();

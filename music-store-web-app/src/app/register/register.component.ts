@@ -33,6 +33,8 @@ export class RegisterComponent {
       firstName: this.formGroup.controls.firstName.value,
       lastName: this.formGroup.controls.lastName.value,
       email: this.formGroup.controls.email.value,
+      username: this.formGroup.controls.username.value,
+      password: this.formGroup.controls.password.value,
     })).subscribe(_ => {
       this.router.navigate([`/customers/`]);
     });

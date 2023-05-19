@@ -22,6 +22,13 @@ namespace MusicStoreInfrastructure
                 .IsRequired();
             builder.Property(c => c.Role)
                 .IsRequired();
+            builder.Property(c => c.Username)
+                .IsRequired()
+                .HasMaxLength(30);
+            builder.Property(c => c.Password)
+                .IsRequired();
+            builder.Property(c => c.Salt)
+                .IsRequired();
 
             builder.HasMany(c => c.Orders)
                 .WithOne(c => c.Customer);
