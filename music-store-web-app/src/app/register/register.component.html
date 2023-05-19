@@ -1,0 +1,48 @@
+<div class="register-container">
+  <div class="register-card">
+    <h2 class="register-heading">Register</h2>
+    <form [formGroup]="formGroup" class="register-form">
+      <div class="form-group">
+        <mat-form-field class="form-field">
+          <label for="firstName">First Name</label>
+          <input id="firstName" type="text" formControlName="firstName" required>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="form-field">
+          <label for="lastName">Last Name</label>
+          <input id="lastName" type="text" formControlName="lastName" required>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="form-field">
+          <label for="email">Email</label>
+          <input id="email" type="email" formControlName="email" required placeholder="Ex. pat@example.com">
+          <mat-error *ngIf="formGroup.get('email')?.hasError('email') && formGroup.get('email')?.dirty">
+            Please enter a valid email address
+          </mat-error>
+          <mat-error *ngIf="formGroup.get('email')?.hasError('required') && formGroup.get('email')?.dirty">
+            Email is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="form-field">
+          <label for="username">Username</label>
+          <input id="username" type="text" formControlName="username" required>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <mat-form-field class="form-field">
+          <label for="password">Password</label>
+          <input id="password" type="password" formControlName="password" required>
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <button type="submit" (click)="register()">Register</button>
+      </div>
+    </form>
+    <p class="register-text">Already have an account? <a href="/login">Login</a></p>
+  </div>
+</div>
+  

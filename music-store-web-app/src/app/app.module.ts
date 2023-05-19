@@ -30,6 +30,9 @@ import {MatInputModule} from '@angular/material/input';
 import { MatCardModule} from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { EditProductComponent } from './products/edit-product/edit-product.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import {MatPaginatorModule} from '@angular/material/paginator'; 
 
 @NgModule({
   declarations: [
@@ -42,7 +45,9 @@ import { EditProductComponent } from './products/edit-product/edit-product.compo
     CartComponent,
     PageNotFoundComponent,
     EditCustomerComponent,
-    EditProductComponent
+    EditProductComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -65,7 +70,8 @@ import { EditProductComponent } from './products/edit-product/edit-product.compo
     MatTabsModule,
     MatListModule,
     MatOptionModule,
-    MatDialogModule
+    MatDialogModule,
+    MatPaginatorModule,
   ],
   providers: [
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } }

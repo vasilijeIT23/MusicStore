@@ -1,4 +1,4 @@
-<form [formGroup]="formGroup">
+<form [formGroup]="updateFormGroup" *ngIf="isCreate">
     <mat-form-field>
       <mat-label for="name">Name: </mat-label>
       <input matInput id="name" type="text" formControlName="name">
@@ -14,6 +14,29 @@
       <input matInput id="price" type="numeric" formControlName="price">
     </mat-form-field>
   
-    <button mat-button type="submit" [disabled]="formGroup.invalid" (click)="onSubmit()">Submit</button>
+    <button mat-button type="submit" [disabled]="updateFormGroup.invalid" (click)="onSubmit()">Submit</button>
+  </form>
+
+  <form [formGroup]="createFormGroup" *ngIf="!isCreate">
+    <mat-form-field>
+      <mat-label for="name">Name: </mat-label>
+      <input matInput id="name" type="text" formControlName="name">
+    </mat-form-field>
+  
+    <mat-form-field>
+      <mat-label for="productType">ProductType: </mat-label>
+      <mat-select formControlName="productType">
+        <mat-option *ngFor="let productType of productTypes" [value]="productType.name">
+          {{ productType.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <mat-form-field>
+      <mat-label for="price">Price: </mat-label>
+      <input matInput id="price" type="numeric" formControlName="price">
+    </mat-form-field>
+  
+    <button mat-button type="submit" [disabled]="createFormGroup.invalid" (click)="onSubmit()">Submit</button>
   </form>
   

@@ -10,11 +10,16 @@ import { CartComponent } from './cart/cart.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { EditCustomerComponent } from './customers/edit-customer/edit-customer.component';
 import { EditProductComponent } from './products/edit-product/edit-product.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
+  { path: 'login', component: LoginComponent},
+  { path: 'register', component: RegisterComponent},
   { path: 'customers', component: CustomersComponent},
   { path: 'customers/edit/:id', component: EditCustomerComponent},
   { path: 'products', component: ProductsComponent},
+  { path: 'products/create', component: EditProductComponent},
   { path: 'products/edit/:id', component: EditProductComponent},
   { path: 'warehouses', component: WarehousesComponent},
   { path: 'stock', component: StockComponent},
