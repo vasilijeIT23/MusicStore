@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http'; 
+import { HTTP_INTERCEPTORS, HttpClientModule, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http'; 
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -33,6 +33,25 @@ import { EditProductComponent } from './products/edit-product/edit-product.compo
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import {MatPaginatorModule} from '@angular/material/paginator'; 
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class TokenInterceptor implements HttpInterceptor {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      // Clone the request and add the token to the 'Authorization' header
+      const authRequest = request.clone({
+        headers: request.headers.set('Authorization', `Bearer ${token}`)
+      });
+
+      return next.handle(authRequest);
+    }
+
+    return next.handle(request);
+  }
+}
 
 @NgModule({
   declarations: [
@@ -74,7 +93,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatPaginatorModule,
   ],
   providers: [
-    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } }
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

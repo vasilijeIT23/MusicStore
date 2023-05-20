@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-root',
@@ -9,14 +10,15 @@ import { Router } from '@angular/router';
 export class AppComponent {
   title = 'music-store-web-app';
 
-  isCustomer = true;
-  isManager = true;
+  token = localStorage.getItem('token');
+  role = localStorage.getItem('role');
 
   constructor(private router: Router)
   {
   }
 
- redirect(route: string){
-  this.router.navigate([`/` + route + `/`]);
- }
+  redirect(route: string){
+    this.router.navigate([`/` + route + `/`]);
+  }
+
 }

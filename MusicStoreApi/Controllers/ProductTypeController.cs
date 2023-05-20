@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MusicStoreApi.Handlers.ProductTypes.Commands;
 using MusicStoreApi.Handlers.ProductTypes.Queries;
@@ -7,6 +8,7 @@ using System.Net;
 
 namespace MusicStoreApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/productTypes")]
     public class ProductTypeController : ControllerBase

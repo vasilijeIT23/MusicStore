@@ -2,58 +2,58 @@
 
 <mat-sidenav-container class="side-nav-container">
   <mat-sidenav opened mode="side" class="side-nav">
-    <mat-nav-list *ngIf="isCustomer">
-      <div class="nav-header">
-        <mat-icon class="nav-icon">account_circle</mat-icon>
-        <span>Customer Profile</span>
-      </div>
-      <a mat-list-item routerLink="/login">
-        <mat-icon class="nav-icon">login</mat-icon>
-        <span>Login</span>
-      </a>
-      <a mat-list-item routerLink="/customers">
-        <mat-icon class="nav-icon">person</mat-icon>
-        <span>Profile</span>
-      </a>
-      <a mat-list-item routerLink="/products">
-        <mat-icon class="nav-icon">shopping_basket</mat-icon>
-        <span>Products</span>
-      </a>
-      <a mat-list-item routerLink="/cart">
-        <mat-icon class="nav-icon">shopping_cart</mat-icon>
-        <span>My Cart</span>
-      </a>
-    </mat-nav-list>
-    <mat-nav-list *ngIf="isManager">
-      <div class="nav-header">
-        <mat-icon class="nav-icon">account_circle</mat-icon>
-        <span>Manager Profile</span>
-      </div>
-      <a mat-list-item routerLink="/login">
-        <mat-icon class="nav-icon">login</mat-icon>
-        <span>Login</span>
-      </a>
-      <a mat-list-item routerLink="/customers">
-        <mat-icon class="nav-icon">person</mat-icon>
-        <span>Profile</span>
-      </a>
-      <a mat-list-item routerLink="/products">
-        <mat-icon class="nav-icon">shopping_basket</mat-icon>
-        <span>Products</span>
-      </a>
-      <a mat-list-item routerLink="/warehouses">
-        <mat-icon class="nav-icon">store</mat-icon>
-        <span>Warehouse</span>
-      </a>
-      <a mat-list-item routerLink="/stock">
-        <mat-icon class="nav-icon">storage</mat-icon>
-        <span>Stock</span>
-      </a>
-      <a mat-list-item routerLink="/productTypes">
-        <mat-icon class="nav-icon">category</mat-icon>
-        <span>Product Types</span>
-      </a>
-    </mat-nav-list>
+    <a mat-list-item routerLink="/login">
+      <mat-icon class="nav-icon" *ngIf="token == null">login</mat-icon>
+      <span *ngIf="token == null">Login</span>
+      <mat-icon class="nav-icon" *ngIf="token != null">logout</mat-icon>
+      <span *ngIf="token != null">Logout</span>
+    </a>
+    <div *ngIf="token != null">
+      <mat-nav-list *ngIf="role == 'Regular'">
+        <div class="nav-header">
+          <mat-icon class="nav-icon">account_circle</mat-icon>
+          <span>Customer Profile</span>
+        </div>
+        <a mat-list-item routerLink="/customers" >
+          <mat-icon class="nav-icon">person</mat-icon>
+          <span>Profile</span>
+        </a>
+        <a mat-list-item routerLink="/products" >
+          <mat-icon class="nav-icon">shopping_basket</mat-icon>
+          <span>Products</span>
+        </a>
+        <a mat-list-item routerLink="/cart" >
+          <mat-icon class="nav-icon">shopping_cart</mat-icon>
+          <span>My Cart</span>
+        </a>
+      </mat-nav-list>
+      <mat-nav-list *ngIf="role == 'Admin'">
+        <div class="nav-header">
+          <mat-icon class="nav-icon">account_circle</mat-icon>
+          <span>Manager Profile</span>
+        </div>
+        <a mat-list-item routerLink="/customers" >
+          <mat-icon class="nav-icon">person</mat-icon>
+          <span>Profile</span>
+        </a>
+        <a mat-list-item routerLink="/products" >
+          <mat-icon class="nav-icon">shopping_basket</mat-icon>
+          <span>Products</span>
+        </a>
+        <a mat-list-item routerLink="/warehouses">
+          <mat-icon class="nav-icon">store</mat-icon>
+          <span>Warehouse</span>
+        </a>
+        <a mat-list-item routerLink="/stock" >
+          <mat-icon class="nav-icon">storage</mat-icon>
+          <span>Stock</span>
+        </a>
+        <a mat-list-item routerLink="/productTypes" >
+          <mat-icon class="nav-icon">category</mat-icon>
+          <span>Product Types</span>
+        </a>
+      </mat-nav-list>
+    </div>
   </mat-sidenav>
   <mat-sidenav-content>
     <router-outlet></router-outlet>

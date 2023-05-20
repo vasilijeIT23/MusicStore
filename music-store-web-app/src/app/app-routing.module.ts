@@ -12,6 +12,7 @@ import { EditCustomerComponent } from './customers/edit-customer/edit-customer.c
 import { EditProductComponent } from './products/edit-product/edit-product.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent},
@@ -19,18 +20,19 @@ const routes: Routes = [
   { path: 'customers', component: CustomersComponent},
   { path: 'customers/edit/:id', component: EditCustomerComponent},
   { path: 'products', component: ProductsComponent},
-  { path: 'products/create', component: EditProductComponent},
-  { path: 'products/edit/:id', component: EditProductComponent},
-  { path: 'warehouses', component: WarehousesComponent},
-  { path: 'stock', component: StockComponent},
+  { path: 'products/create', component: EditProductComponent, canActivate: [AuthGuard]},
+  { path: 'products/edit/:id', component: EditProductComponent, canActivate: [AuthGuard]},
+  { path: 'warehouses', component: WarehousesComponent, canActivate: [AuthGuard]},
+  { path: 'stock', component: StockComponent, canActivate: [AuthGuard]},
   { path: 'cart', component: CartComponent},
-  { path: 'productTypes', component: ProductTypesComponent},
+  { path: 'productTypes', component: ProductTypesComponent, canActivate: [AuthGuard]},
   { path: '', redirectTo: 'products', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent},
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AuthGuard]
 })
 export class AppRoutingModule { }

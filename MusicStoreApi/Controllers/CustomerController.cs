@@ -1,12 +1,15 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MusicStoreApi.Handlers.Customers.Commands;
 using MusicStoreApi.Handlers.Customers.Queries;
 using MusicStoreCore.Entities;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace MusicStoreApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/customers")]
     public class CustomerController : ControllerBase
@@ -43,6 +46,7 @@ namespace MusicStoreApi.Controllers
             return customer == null ? NotFound() : Ok(customer);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType(type: typeof(Customer), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Create([FromBody] CreateCustomer.Command request)
@@ -136,24 +140,26 @@ namespace MusicStoreApi.Controllers
             return NoContent();
         }
 
+        [AllowAnonymous]
         [HttpPost("auth")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(type: typeof(Customer), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticateCustomer.Command request)
         {
             var response = await _mediator.Send(request);
 
-            return response ? Ok(response) : Unauthorized();  
+            return response != null ? Ok(response) : Unauthorized();  
         }
 
+        [AllowAnonymous]
         [HttpPost("jwtToken")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(type: typeof(string), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GenerateJwtToken([FromBody] GenerateJwtToken.Command request)
         {
             var response = await _mediator.Send(request);
 
-            return response ? Ok(response) : BadRequest();
+            return response != null ? Ok(response) : BadRequest();
         }
 
     }

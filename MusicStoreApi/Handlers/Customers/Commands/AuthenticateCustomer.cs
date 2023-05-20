@@ -12,14 +12,14 @@ namespace MusicStoreApi.Handlers.Customers.Commands
     public static class AuthenticateCustomer
     {
         [PublicAPI]
-        public class Command : IRequest<bool>
+        public class Command : IRequest<Customer>
         {
             public string Username { get; set; } = string.Empty;
             public string Password { get; set; } = string.Empty;
         }
 
         [UsedImplicitly]
-        public class RequestHandler : IRequestHandler<Command, bool>
+        public class RequestHandler : IRequestHandler<Command, Customer>
         {
             private readonly IRepository<Customer> _repository;
 
@@ -27,7 +27,7 @@ namespace MusicStoreApi.Handlers.Customers.Commands
             {
                 _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             }
-            public Task<bool> Handle(Command request, CancellationToken cancellationToken)
+            public Task<Customer> Handle(Command request, CancellationToken cancellationToken)
             {
                 //BadRequest
                 if (request == null)
@@ -37,9 +37,9 @@ namespace MusicStoreApi.Handlers.Customers.Commands
 
                 var customer = _repository.Find(x => x.Username == request.Username).SingleOrDefault();
                 //CustomerDoesntExist
-                if (customer != null)
+                if (customer != null && UserExtensions.VerifyPassword(request.Password, customer.Password, customer.Salt))
                 {
-                    return Task.FromResult(UserExtensions.VerifyPassword(request.Password, customer.Password, customer.Salt));
+                    return Task.FromResult(customer);
                 }
 
                 throw new EntityDoesntExistException();

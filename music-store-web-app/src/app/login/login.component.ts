@@ -4,6 +4,8 @@ import { CustomerClient, AuthenticateCustomerCommand, GenerateJwtTokenCommand  }
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@angular/forms';
+import jwt_decode from 'jwt-decode'
+import jwtDecode from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +15,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class LoginComponent {
 
   isAuthenticated = false;
+  decoded: any | undefined;
+  role: string | undefined;
 
   constructor(private route: ActivatedRoute,
     private client: CustomerClient,
@@ -26,17 +30,30 @@ export class LoginComponent {
   });
 
   ngOnInit(){
+    localStorage.removeItem('token');
   }
 
   login() {
     this.client.authenticate(new AuthenticateCustomerCommand({
       username: this.formGroup.controls.username.value,
       password: this.formGroup.controls.password.value,
-    })).subscribe();
-    this.client.generateJwtToken(new GenerateJwtTokenCommand({
-      username: this.formGroup.controls.username.value
-    })).subscribe(_ => {
-      this.router.navigate([`/products/`]);
+    })).subscribe(response => {
+      this.client.generateJwtToken(new GenerateJwtTokenCommand({
+        username: this.formGroup.controls.username.value
+      })).subscribe(response => {
+        localStorage.setItem('token', response!)
+
+        this.decoded = jwt_decode(localStorage.getItem('token')!);
+        this.role = this.decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+
+        localStorage.setItem('role', this.role!)
+        
+        this.router.navigate([`/products/`]);
+      });
+    }, error => {
+      this.isAuthenticated = false;
     });
   }
 }
+
+

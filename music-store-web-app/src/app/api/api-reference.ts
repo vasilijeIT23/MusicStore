@@ -385,8 +385,8 @@ export interface ICustomerClient {
     purchaseProduct(customerId: string, cartId: string, request: PurchaseFromCartCommand): Observable<void>;
     promote(id: string, request: PromoteCustomerCommand): Observable<Customer>;
     reviewProduct(customerId: string, productId: string): Observable<void>;
-    authenticate(request: AuthenticateCustomerCommand): Observable<void>;
-    generateJwtToken(request: GenerateJwtTokenCommand): Observable<void>;
+    authenticate(request: AuthenticateCustomerCommand): Observable<Customer>;
+    generateJwtToken(request: GenerateJwtTokenCommand): Observable<string>;
 }
 
 @Injectable({
@@ -1144,7 +1144,7 @@ export class CustomerClient implements ICustomerClient {
         return _observableOf(null as any);
     }
 
-    authenticate(request: AuthenticateCustomerCommand): Observable<void> {
+    authenticate(request: AuthenticateCustomerCommand): Observable<Customer> {
         let url_ = this.baseUrl + "/api/customers/auth";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1156,6 +1156,7 @@ export class CustomerClient implements ICustomerClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             })
         };
 
@@ -1166,14 +1167,14 @@ export class CustomerClient implements ICustomerClient {
                 try {
                     return this.processAuthenticate(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<Customer>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<Customer>;
         }));
     }
 
-    protected processAuthenticate(response: HttpResponseBase): Observable<void> {
+    protected processAuthenticate(response: HttpResponseBase): Observable<Customer> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1182,7 +1183,10 @@ export class CustomerClient implements ICustomerClient {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return _observableOf(null as any);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Customer.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status === 401) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -1199,7 +1203,7 @@ export class CustomerClient implements ICustomerClient {
         return _observableOf(null as any);
     }
 
-    generateJwtToken(request: GenerateJwtTokenCommand): Observable<void> {
+    generateJwtToken(request: GenerateJwtTokenCommand): Observable<string> {
         let url_ = this.baseUrl + "/api/customers/jwtToken";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1211,6 +1215,7 @@ export class CustomerClient implements ICustomerClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             })
         };
 
@@ -1221,14 +1226,14 @@ export class CustomerClient implements ICustomerClient {
                 try {
                     return this.processGenerateJwtToken(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<string>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<string>;
         }));
     }
 
-    protected processGenerateJwtToken(response: HttpResponseBase): Observable<void> {
+    protected processGenerateJwtToken(response: HttpResponseBase): Observable<string> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1237,7 +1242,11 @@ export class CustomerClient implements ICustomerClient {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return _observableOf(null as any);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
             }));
         } else if (status === 400) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {

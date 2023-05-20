@@ -15,13 +15,13 @@ namespace MusicStoreApi.Handlers.Customers.Commands
     public class GenerateJwtToken
     {
         [PublicAPI]
-        public class Command : IRequest<bool>
+        public class Command : IRequest<string>
         {
             public string Username { get; set; } = string.Empty;
         }
 
         [UsedImplicitly]
-        public class RequestHandler : IRequestHandler<Command, bool>
+        public class RequestHandler : IRequestHandler<Command, string>
         {
             private readonly IConfiguration _configuration;
             private readonly IRepository<Customer> _repository;
@@ -31,7 +31,7 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                 _repository = repository ?? throw new ArgumentNullException(nameof(repository));
                 _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             }
-            public Task<bool> Handle(Command request, CancellationToken cancellationToken)
+            public Task<string> Handle(Command request, CancellationToken cancellationToken)
             {
                 //BadRequest
                 if (request == null)
@@ -69,9 +69,9 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                                                 expires: DateTime.Now.AddMinutes(600),
                                                 signingCredentials: credentials);
 
-                        new JwtSecurityTokenHandler().WriteToken(token);
+                        
 
-                        return Task.FromResult(true);
+                        return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
                     }
                 }
 
