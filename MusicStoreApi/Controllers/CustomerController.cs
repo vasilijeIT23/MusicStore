@@ -135,6 +135,27 @@ namespace MusicStoreApi.Controllers
         {
             return NoContent();
         }
+
+        [HttpPost("auth")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticateCustomer.Command request)
+        {
+            var response = await _mediator.Send(request);
+
+            return response ? Ok(response) : Unauthorized();  
+        }
+
+        [HttpPost("jwtToken")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GenerateJwtToken([FromBody] GenerateJwtToken.Command request)
+        {
+            var response = await _mediator.Send(request);
+
+            return response ? Ok(response) : BadRequest();
+        }
+
     }
 
 }

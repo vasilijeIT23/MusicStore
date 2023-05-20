@@ -22,7 +22,7 @@ namespace MusicStoreCore.Entities
         public IList<Review> Reviews { get; set; }
 
         public Customer() { }
-        public Customer(string firstName, string lastName, string email, string username, string password)
+        public Customer(string firstName, string lastName, string email, string username, string password, string salt)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -32,26 +32,10 @@ namespace MusicStoreCore.Entities
             StatusExpirationDate = null;
             MoneySpent = 0.0d;
             Username = username;
-            Password = Hash(password);
-            Salt = Hash(GetSalt().ToString());
+            Password = Hash(password) + Hash(salt);
+            Salt = Hash(salt);
             Orders = new List<Order>();
             Reviews = new List<Review>();
-        }
-
-        private static int saltLengthLimit = 32;
-        private static byte[] GetSalt()
-        {
-            return GetSalt(saltLengthLimit);
-        }
-        private static byte[] GetSalt(int maximumSaltLength)
-        {
-            var salt = new byte[maximumSaltLength];
-            using (var random = new RNGCryptoServiceProvider())
-            {
-                random.GetNonZeroBytes(salt);
-            }
-
-            return salt;
         }
 
         public string Hash(string stringToHash)

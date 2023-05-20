@@ -2,6 +2,7 @@
 using MediatR;
 using MusicStoreApi.Repository;
 using MusicStoreCore.Entities;
+using System.Security.Cryptography;
 
 namespace MusicStoreApi.Handlers.Customers.Commands
 {
@@ -42,7 +43,8 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                     return Task.FromResult(existingCustomer);
                 }
 
-                var customer = new Customer(request.FirstName, request.LastName, request.Email, request.Username, request.Password);
+                var salt = GetSalt().ToString();
+                var customer = new Customer(request.FirstName, request.LastName, request.Email, request.Username, request.Password, salt);
 
                 _customerRepository.Create(customer);
                 _customerRepository.SaveChanges();
@@ -54,6 +56,22 @@ namespace MusicStoreApi.Handlers.Customers.Commands
 
                 return Task.FromResult(customer);
             }
+        }
+
+        private static int saltLengthLimit = 32;
+        private static byte[] GetSalt()
+        {
+            return GetSalt(saltLengthLimit);
+        }
+        private static byte[] GetSalt(int maximumSaltLength)
+        {
+            var salt = new byte[maximumSaltLength];
+            using (var random = new RNGCryptoServiceProvider())
+            {
+                random.GetNonZeroBytes(salt);
+            }
+
+            return salt;
         }
     }
 }

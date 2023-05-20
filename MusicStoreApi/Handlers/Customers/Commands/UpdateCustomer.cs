@@ -8,7 +8,7 @@ using MusicStoreCore.Enums;
 
 namespace MusicStoreApi.Handlers.Customers.Commands
 {
-    public class UpdateCustomer
+    public static class UpdateCustomer
     {
         [PublicAPI]
         public class Command : IRequest<Customer>

@@ -1,14 +1,31 @@
 using FluentAssertions.Common;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MusicStoreApi.Repository;
 using MusicStoreCore.Entities;
 using MusicStoreInfrastructure;
+using System.Text;
 using System.Text.Json.Serialization;
 using ToDoApi.Infrastructure;
 
 var AllowCors = "_allowCors";
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+    };
+});
 
 builder.Services.AddDbContext<MusicStoreContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MusicStore")));
