@@ -1,0 +1,32 @@
+<div class="profile-container">
+    <h2>Profile</h2>
+    <table class="profile-table">
+      <tr>
+        <th>Name</th>
+        <td>{{ customer.firstName }}</td>
+      </tr>
+      <tr>
+        <th>Surname</th>
+        <td>{{ customer.lastName }}</td>
+      </tr>
+      <tr>
+        <th>Email</th>
+        <td>{{ customer.email }}</td>
+      </tr>
+      <tr>
+        <th>Status</th>
+        <td>{{ customer.status }}</td>
+      </tr>
+      <tr>
+        <th>Status Expiration Date</th>
+        <td>{{ customer.statusExpirationDate }}</td>
+      </tr>
+    </table>
+    <div class="profile-actions">
+      <button (click)="onUpdate(customer)">Update</button>
+      <button (click)="onDelete(customer)" class="delete">Delete</button>
+    </div>
+  </div>
+  
+
+

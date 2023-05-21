@@ -1,42 +1,37 @@
-<form [formGroup]="updateFormGroup" *ngIf="isCreate">
-    <mat-form-field>
-      <mat-label for="name">Name: </mat-label>
-      <input matInput id="name" type="text" formControlName="name">
+<form [formGroup]="formGroup" class="form-container">
+  <div class="form-field">
+    <mat-form-field appearance="outline" class="styled-form-field">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" formControlName="name" class="styled-input">
     </mat-form-field>
-  
-    <mat-form-field>
-      <mat-label for="inStock">In Stock: </mat-label>
-      <input matInput id="inStock" type="boolean" formControlName="inStock">
-    </mat-form-field>
-  
-    <mat-form-field>
-      <mat-label for="price">Price: </mat-label>
-      <input matInput id="price" type="numeric" formControlName="price">
-    </mat-form-field>
-  
-    <button mat-button type="submit" [disabled]="updateFormGroup.invalid" (click)="onSubmit()">Submit</button>
-  </form>
+  </div>
 
-  <form [formGroup]="createFormGroup" *ngIf="!isCreate">
-    <mat-form-field>
-      <mat-label for="name">Name: </mat-label>
-      <input matInput id="name" type="text" formControlName="name">
+  <div class="form-field" *ngIf="!isCreate">
+    <mat-form-field appearance="outline" class="styled-form-field">
+      <mat-label>In Stock</mat-label>
+      <input matInput type="text" formControlName="inStock" class="styled-input">
     </mat-form-field>
-  
-    <mat-form-field>
+  </div>
+
+  <div class="form-field" *ngIf="isCreate">
+    <mat-form-field appearance="outline" class="styled-form-field">
       <mat-label for="productType">ProductType: </mat-label>
       <mat-select formControlName="productType">
-        <mat-option *ngFor="let productType of productTypes" [value]="productType.name">
+        <mat-option *ngFor="let productType of productTypes" [value]="productType.name" class="styled-input">
           {{ productType.name }}
         </mat-option>
       </mat-select>
     </mat-form-field>
-  
-    <mat-form-field>
-      <mat-label for="price">Price: </mat-label>
-      <input matInput id="price" type="numeric" formControlName="price">
+  </div>
+
+  <div class="form-field">
+    <mat-form-field appearance="outline" class="styled-form-field">
+      <mat-label>Price</mat-label>
+      <input matInput type="numeric" formControlName="price" class="styled-input">
     </mat-form-field>
-  
-    <button mat-button type="submit" [disabled]="createFormGroup.invalid" (click)="onSubmit()">Submit</button>
-  </form>
+  </div>
+
+  <button mat-flat-button type="submit" [disabled]="formGroup.invalid" (click)="onSubmit()" class="styled-button">Submit</button>
+</form>
+
   

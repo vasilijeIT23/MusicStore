@@ -22,6 +22,7 @@ export class ProductsComponent implements OnInit {
   constructor(private client: ProductClient, private router: Router) {}
 
   ngOnInit() {
+    this.router.navigate([this.router.url]) 
     this.client.getAll().subscribe(result => {
       this.products = result;
       this.totalItems = this.products.length;

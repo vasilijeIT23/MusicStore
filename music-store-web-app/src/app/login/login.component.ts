@@ -17,6 +17,7 @@ export class LoginComponent {
   isAuthenticated = false;
   decoded: any | undefined;
   role: string | undefined;
+  id: string | undefined;
 
   constructor(private route: ActivatedRoute,
     private client: CustomerClient,
@@ -31,6 +32,8 @@ export class LoginComponent {
 
   ngOnInit(){
     localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('id');
   }
 
   login() {
@@ -45,8 +48,10 @@ export class LoginComponent {
 
         this.decoded = jwt_decode(localStorage.getItem('token')!);
         this.role = this.decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+        this.id = this.decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
 
         localStorage.setItem('role', this.role!)
+        localStorage.setItem('id', this.id!);
         
         this.router.navigate([`/products/`]);
       });

@@ -15,11 +15,21 @@ export class CustomersComponent implements OnInit {
   displayedColumns: string[] = ['firstName', 'lastName', 'email', 'role', 'status', 'statusExpirationDate', 'moneySpent', 'actions'];
 
   customers: Customer[] = [];
+  loggedCustomer: Customer[] = [];
+
+  id: string = localStorage.getItem('id')!;
+  role: string = localStorage.getItem('role')!;
+
   constructor(private client: CustomerClient, private router: Router, public dialog: MatDialog) {}
 
   ngOnInit(){
     this.client.getAll().subscribe(result => {
       this.customers = result;
+    });
+    this.client.getById(this.id).subscribe(result => {
+      this.loggedCustomer.push(result);
+      console.log(this.loggedCustomer);
+      console.log(this.customers);
     });
   }
 

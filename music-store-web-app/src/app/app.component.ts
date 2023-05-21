@@ -10,6 +10,8 @@ import jwt_decode from 'jwt-decode';
 export class AppComponent {
   title = 'music-store-web-app';
 
+  //token: string = '';
+
   token = localStorage.getItem('token');
   role = localStorage.getItem('role');
 

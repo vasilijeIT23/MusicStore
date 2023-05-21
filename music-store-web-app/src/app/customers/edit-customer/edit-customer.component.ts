@@ -27,6 +27,7 @@ export class EditCustomerComponent {
     private readonly snackBar: MatSnackBar,
     public dialog: MatDialog) { }
 
+  isDisabled: boolean = true;    
   id: string = '';
 
   formGroup = new FormGroup({
@@ -59,6 +60,15 @@ export class EditCustomerComponent {
 
   get email(){
     return this.formGroup.controls.email;
+  }
+
+  disabled(){
+    console.log();
+    if(this.route.snapshot.url[0].path === 'profile'){
+      this.isDisabled = false;
+      return this.isDisabled;
+    }
+    return this.isDisabled;
   }
   
   private readonly patchForm = (customer: Customer) => {

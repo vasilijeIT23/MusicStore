@@ -1,6 +1,6 @@
 import { Injectable, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HTTP_INTERCEPTORS, HttpClientModule, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http'; 
+import { HTTP_INTERCEPTORS, HttpClientModule, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,28 +12,32 @@ import { StockComponent } from './stock/stock.component';
 import { CartComponent } from './cart/cart.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatSidenavModule} from '@angular/material/sidenav'; 
-import {MatTableModule} from '@angular/material/table'; 
-import {MatTabsModule} from '@angular/material/tabs';
-import {MatListModule} from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatListModule } from '@angular/material/list';
 import { EditCustomerComponent } from './customers/edit-customer/edit-customer.component';
-import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatButtonModule} from '@angular/material/button';
-import{MatIconModule} from '@angular/material/icon';
-import {MatMenuModule} from '@angular/material/menu';
-import{MatDialogModule} from '@angular/material/dialog';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import { MatCardModule} from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { EditProductComponent } from './products/edit-product/edit-product.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import {MatPaginatorModule} from '@angular/material/paginator'; 
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
+import { EditWarehouseComponent } from './warehouses/edit-warehouse/edit-warehouse.component';
+import { EditProductTypeComponent } from './product-types/edit-product-type/edit-product-type.component';
+import { EditStockComponent } from './stock/edit-stock/edit-stock.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -66,7 +70,11 @@ export class TokenInterceptor implements HttpInterceptor {
     EditCustomerComponent,
     EditProductComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    EditWarehouseComponent,
+    EditProductTypeComponent,
+    EditStockComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -93,7 +101,7 @@ export class TokenInterceptor implements HttpInterceptor {
     MatPaginatorModule,
   ],
   providers: [
-    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]

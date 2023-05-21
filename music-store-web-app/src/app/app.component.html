@@ -1,20 +1,24 @@
+<div class="top-bar">
+  <div class="logo">
+    <h2>Good Vibez</h2>
+  </div>
+  <div class="user-actions">
+    <button *ngIf="token !== null" (click)="redirect('login')">Logout</button>
+    <button *ngIf="token === null" (click)="redirect('login')">Login</button>
+  </div>
+</div>
+
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-<mat-sidenav-container class="side-nav-container">
+<mat-sidenav-container class="side-nav-container" *ngIf="token !== null">
   <mat-sidenav opened mode="side" class="side-nav">
-    <a mat-list-item routerLink="/login">
-      <mat-icon class="nav-icon" *ngIf="token == null">login</mat-icon>
-      <span *ngIf="token == null">Login</span>
-      <mat-icon class="nav-icon" *ngIf="token != null">logout</mat-icon>
-      <span *ngIf="token != null">Logout</span>
-    </a>
     <div *ngIf="token != null">
-      <mat-nav-list *ngIf="role == 'Regular'">
+      <mat-nav-list *ngIf="role === 'Regular'">
         <div class="nav-header">
           <mat-icon class="nav-icon">account_circle</mat-icon>
           <span>Customer Profile</span>
         </div>
-        <a mat-list-item routerLink="/customers" >
+        <a mat-list-item routerLink="/profile" >
           <mat-icon class="nav-icon">person</mat-icon>
           <span>Profile</span>
         </a>
@@ -27,13 +31,17 @@
           <span>My Cart</span>
         </a>
       </mat-nav-list>
-      <mat-nav-list *ngIf="role == 'Admin'">
+      <mat-nav-list *ngIf="role === 'Admin'">
         <div class="nav-header">
           <mat-icon class="nav-icon">account_circle</mat-icon>
           <span>Manager Profile</span>
         </div>
-        <a mat-list-item routerLink="/customers" >
+        <a mat-list-item routerLink="/profile" >
           <mat-icon class="nav-icon">person</mat-icon>
+          <span>Profile</span>
+        </a>
+        <a mat-list-item routerLink="/customers" >
+          <mat-icon class="nav-icon">people</mat-icon>
           <span>Profile</span>
         </a>
         <a mat-list-item routerLink="/products" >
@@ -60,5 +68,5 @@
   </mat-sidenav-content>
 </mat-sidenav-container>
 
-
+<router-outlet></router-outlet>
 

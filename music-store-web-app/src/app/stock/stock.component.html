@@ -1,1 +1,36 @@
-<p>stock works!</p>
+<h2>Stock</h2>
+
+<div class="table-container">
+  <table mat-table [dataSource]="stock" class="mat-elevation-z8">
+    <ng-container matColumnDef="product">
+      <th mat-header-cell *matHeaderCellDef>Product</th>
+      <td mat-cell *matCellDef="let stock">{{stock.product.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="warehouse">
+      <th mat-header-cell *matHeaderCellDef>Warehouse</th>
+      <td mat-cell *matCellDef="let stock">{{ stock.warehouse.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef>Quantity</th>
+        <td mat-cell *matCellDef="let stock">{{ stock.quantity }}</td>
+      </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let stock">
+        <button mat-icon-button color="primary" [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="onUpdate(stock)">Update</button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>
+

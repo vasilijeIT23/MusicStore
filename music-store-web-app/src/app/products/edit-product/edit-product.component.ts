@@ -21,17 +21,12 @@ export class EditProductComponent {
 
   id: string | undefined;
   productTypes: ProductType[] = [];
-  isCreate: boolean = false;
+  isCreate: boolean = true;
 
-  updateFormGroup = new FormGroup({
+  formGroup = new FormGroup({
     id: new FormControl('', { nonNullable: true }),
     name: new FormControl('', { nonNullable: true }),
     inStock: new FormControl(false, { nonNullable: true }),
-    price: new FormControl(0, { nonNullable: true }),
-  });
-
-  createFormGroup = new FormGroup({
-    name: new FormControl('', { nonNullable: true }),
     productType: new FormControl('', { nonNullable: true }),
     price: new FormControl(0, { nonNullable: true }),
   });
@@ -44,16 +39,16 @@ export class EditProductComponent {
     this.id = this.route.snapshot.paramMap.get('id') ?? undefined;
     if (this.id) {
       this.productClient.getById(this.id).subscribe(data => this.patchForm(data));
-      this.isCreate = true;
+      this.isCreate = false;
     }
   }
   onSubmit(){
     if(this.id){
       this.productClient.update(new UpdateProductCommand({
-          id: this.updateFormGroup.controls.id.value,
-          name: this.updateFormGroup.controls.name.value,
-          inStock: this.updateFormGroup.controls.inStock.value,
-          price: this.updateFormGroup.controls.price.value
+          id: this.formGroup.controls.id.value,
+          name: this.formGroup.controls.name.value,
+          inStock: this.formGroup.controls.inStock.value,
+          price: this.formGroup.controls.price.value
       })).subscribe(_ => {
           this.snackBar.open('Product updated');
           this.router.navigate([`/products/`]);
@@ -61,9 +56,9 @@ export class EditProductComponent {
     }
   else{
       this.productClient.create(new CreateProductCommand({
-        name: this.createFormGroup.controls.name.value,
-        productType: this.productTypes.find(x => x.name === this.createFormGroup.controls.productType.value)?.id,
-        price: this.createFormGroup.controls.price.value
+        name: this.formGroup.controls.name.value,
+        productType: this.productTypes.find(x => x.name === this.formGroup.controls.productType.value)?.id,
+        price: this.formGroup.controls.price.value
     })).subscribe(_ => {
         this.snackBar.open('Product created');
         this.router.navigate([`/products/`]);
@@ -72,9 +67,9 @@ export class EditProductComponent {
 }
   
   private readonly patchForm = (product: Product) => {
-    this.updateFormGroup.controls.id.patchValue(this.id!);
-    this.updateFormGroup.controls.name.patchValue(product.name!);
-    this.updateFormGroup.controls.inStock.patchValue(product.inStock!);
-    this.updateFormGroup.controls.price.patchValue(product.price!);
+    this.formGroup.controls.id.patchValue(this.id!);
+    this.formGroup.controls.name.patchValue(product.name!);
+    this.formGroup.controls.inStock.patchValue(product.inStock!);
+    this.formGroup.controls.price.patchValue(product.price!);
   }
 }
