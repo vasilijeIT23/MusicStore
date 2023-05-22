@@ -32,4 +32,8 @@ export class ProfileComponent {
   onUpdate(customer: Customer) {
     this.router.navigate([`profile/edit/${customer.id}`]);
   }
+
+  onCart(customerId?: string){
+    this.router.navigate([`cart/${customerId}`]);
+  }
 }

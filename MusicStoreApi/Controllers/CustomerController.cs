@@ -76,7 +76,7 @@ namespace MusicStoreApi.Controllers
             return response ? NoContent() : NotFound();
         }
 
-        [HttpPost("{customerId}/add/{productId}/to/{cartId}")]
+        [HttpPost("addToCart")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -87,7 +87,7 @@ namespace MusicStoreApi.Controllers
             return response == null ? BadRequest() : Ok(response);
         }
 
-        [HttpPut("{customerId}/emptyCart/{cartId}")]
+        [HttpPut("emptyCart")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -98,7 +98,7 @@ namespace MusicStoreApi.Controllers
             return result ? Ok(result) : BadRequest();
         }
 
-        [HttpPut("{customerId}/removeCartItem/{cartItemId}")]
+        [HttpPut("removeCartItem")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -109,7 +109,7 @@ namespace MusicStoreApi.Controllers
             return response? Ok(response) : BadRequest();
         }
 
-        [HttpPost("{customerId}/purchase/{cartId}")]
+        [HttpPost("purchase")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]

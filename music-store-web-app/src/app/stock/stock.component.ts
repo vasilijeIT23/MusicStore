@@ -17,6 +17,7 @@ export class StockComponent {
   ngOnInit(){
     this.client.getAll().subscribe(result => {
       this.stock = result;
+      console.log(this.stock);
     });
   }
 

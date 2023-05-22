@@ -10,6 +10,7 @@ import jwt_decode from 'jwt-decode';
 export class AppComponent {
   title = 'music-store-web-app';
 
+  customerId = localStorage.getItem('id');
   //token: string = '';
 
   token = localStorage.getItem('token');
@@ -21,6 +22,10 @@ export class AppComponent {
 
   redirect(route: string){
     this.router.navigate([`/` + route + `/`]);
+  }
+
+  onCart(){
+    this.router.navigate([`cart/${this.customerId}`]);
   }
 
 }

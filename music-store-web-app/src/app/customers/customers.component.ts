@@ -43,4 +43,8 @@ export class CustomersComponent implements OnInit {
     this.router.navigate([`customers/edit/${customer.id}`]);
   }
 
+  onCart(customerId: string){
+    this.router.navigate([`cart/${customerId}`]);
+
+  }
 }

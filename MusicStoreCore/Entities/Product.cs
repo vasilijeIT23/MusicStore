@@ -9,9 +9,8 @@
         public ProductType ProductType { get; set; } = null!;
         public IList<Review> Reviews { get; set;} = new List<Review>();
 
-        public Product()
-        {
-        }
+        public Product(){}
+
         public Product( string name, double price, ProductType productType)
         {
             Name = name;

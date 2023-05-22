@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DeleteProductCommand, Product, ProductClient } from '../api/api-reference';
+import { AddToCartCommand, CustomerClient, DeleteProductCommand, Product, ProductClient } from '../api/api-reference';
 import { Router } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-products',
@@ -11,6 +12,8 @@ import { PageEvent } from '@angular/material/paginator';
 export class ProductsComponent implements OnInit {
   displayedColumns: string[] = ['name', 'inStock', 'price', 'actions'];
 
+  id = localStorage.getItem('id');
+
   pageSize = 5;
   pageSizeOptions: number[] = [5, 10, 20];
 
@@ -19,18 +22,21 @@ export class ProductsComponent implements OnInit {
 
   products: Product[] = [];
 
-  constructor(private client: ProductClient, private router: Router) {}
+  constructor(private productClient: ProductClient,
+    private customerClient: CustomerClient,
+    private router: Router,
+    private snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.router.navigate([this.router.url]) 
-    this.client.getAll().subscribe(result => {
+    this.productClient.getAll().subscribe(result => {
       this.products = result;
       this.totalItems = this.products.length;
     });
   }
 
   onDelete(query: DeleteProductCommand) {
-    this.client.delete(query).subscribe(_ => {
+    this.productClient.delete(query).subscribe(_ => {
       this.products = this.products.filter(x => x.id !== query.id);
       this.totalItems = this.products.length;
       this.updatePaginator();
@@ -61,5 +67,16 @@ export class ProductsComponent implements OnInit {
     const startIndex = this.currentPage * this.pageSize;
     const endIndex = startIndex + this.pageSize;
     return this.products.slice(startIndex, endIndex);
+  }
+
+  onAddToCart(product: Product){
+    this.customerClient.addToCart(new AddToCartCommand({
+      productId: product.id,
+      customerId: localStorage.getItem('id')!,
+      quantity: 1
+    })).subscribe(_ => {
+      this.snackBar.open('Added to cart');
+      this.router.navigate([`cart/${this.id}`]);
+    });
   }
 }

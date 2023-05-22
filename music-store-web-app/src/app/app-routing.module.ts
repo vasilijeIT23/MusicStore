@@ -33,7 +33,7 @@ const routes: Routes = [
   { path: 'warehouses/create', component: EditWarehouseComponent, canActivate: [AuthGuard]},
   { path: 'stock', component: StockComponent, canActivate: [AuthGuard]},
   { path: 'stock/edit/:id', component: EditStockComponent, canActivate: [AuthGuard]},
-  { path: 'cart', component: CartComponent},
+  { path: 'cart/:id', component: CartComponent},
   { path: 'productTypes', component: ProductTypesComponent, canActivate: [AuthGuard]},
   { path: 'productTypes/edit/:id', component: EditProductTypeComponent, canActivate: [AuthGuard]},
   { path: 'productTypes/create', component: EditProductTypeComponent, canActivate: [AuthGuard]},

@@ -26,7 +26,7 @@
           <mat-icon class="nav-icon">shopping_basket</mat-icon>
           <span>Products</span>
         </a>
-        <a mat-list-item routerLink="/cart" >
+        <a mat-list-item (click)="onCart()" >
           <mat-icon class="nav-icon">shopping_cart</mat-icon>
           <span>My Cart</span>
         </a>
@@ -40,9 +40,13 @@
           <mat-icon class="nav-icon">person</mat-icon>
           <span>Profile</span>
         </a>
+        <a mat-list-item (click)="onCart()" >
+          <mat-icon class="nav-icon">shopping_cart</mat-icon>
+          <span>My Cart</span>
+        </a>
         <a mat-list-item routerLink="/customers" >
           <mat-icon class="nav-icon">people</mat-icon>
-          <span>Profile</span>
+          <span>Users</span>
         </a>
         <a mat-list-item routerLink="/products" >
           <mat-icon class="nav-icon">shopping_basket</mat-icon>

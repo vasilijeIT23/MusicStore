@@ -56,12 +56,29 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                 {
                     throw new RequirementsNotSatisfiedException();
                 }
+
+                if(cart.CartItems.SingleOrDefault(x => x.Product == product) != null)
+                {
+                    var cartItemm = cart.CartItems.SingleOrDefault(x => x.Product.Id == product.Id);
+                    cartItemm.Quantity += request.Quantity;
+                    stock.Quantity -= request.Quantity;
+                    cart.CartValue += product.Price * request.Quantity;
+
+                    _cartItemRepository.SaveChanges();
+                    _stockRepository.SaveChanges();
+                    _cartRepository.SaveChanges();
+
+                    return Task.FromResult(cartItemm);
+                }
                 // todo add cartitem expiration date
                 var cartItem = new CartItem(product, cart, request.Quantity);
                 stock.Quantity -= request.Quantity;
+                cart.CartItems.Add(cartItem);
+                cart.CartValue += product.Price * request.Quantity;
   
                 _cartItemRepository.SaveChanges();
                 _stockRepository.SaveChanges();
+                _cartRepository.SaveChanges();
 
                 return Task.FromResult(cartItem);
             }

@@ -379,10 +379,10 @@ export interface ICustomerClient {
     create(request: CreateCustomerCommand): Observable<Customer>;
     update(request: UpdateCustomerCommand): Observable<Customer>;
     delete(request: DeleteCustomerCommand): Observable<void>;
-    addToCart(customerId: string, productId: string, cartId: string, request: AddToCartCommand): Observable<void>;
-    emptyCart(customerId: string, cartId: string, request: EmptyCartCommand): Observable<void>;
-    removeFromCart(customerId: string, cartItemId: string, request: RemoveCartItemCommand): Observable<void>;
-    purchaseProduct(customerId: string, cartId: string, request: PurchaseFromCartCommand): Observable<void>;
+    addToCart(request: AddToCartCommand): Observable<void>;
+    emptyCart(request: EmptyCartCommand): Observable<void>;
+    removeFromCart(request: RemoveCartItemCommand): Observable<void>;
+    purchaseProduct(request: PurchaseFromCartCommand): Observable<void>;
     promote(id: string, request: PromoteCustomerCommand): Observable<Customer>;
     reviewProduct(customerId: string, productId: string): Observable<void>;
     authenticate(request: AuthenticateCustomerCommand): Observable<Customer>;
@@ -736,17 +736,8 @@ export class CustomerClient implements ICustomerClient {
         return _observableOf(null as any);
     }
 
-    addToCart(customerId: string, productId: string, cartId: string, request: AddToCartCommand): Observable<void> {
-        let url_ = this.baseUrl + "/api/customers/{customerId}/add/{productId}/to/{cartId}";
-        if (customerId === undefined || customerId === null)
-            throw new Error("The parameter 'customerId' must be defined.");
-        url_ = url_.replace("{customerId}", encodeURIComponent("" + customerId));
-        if (productId === undefined || productId === null)
-            throw new Error("The parameter 'productId' must be defined.");
-        url_ = url_.replace("{productId}", encodeURIComponent("" + productId));
-        if (cartId === undefined || cartId === null)
-            throw new Error("The parameter 'cartId' must be defined.");
-        url_ = url_.replace("{cartId}", encodeURIComponent("" + cartId));
+    addToCart(request: AddToCartCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/customers/addToCart";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(request);
@@ -807,14 +798,8 @@ export class CustomerClient implements ICustomerClient {
         return _observableOf(null as any);
     }
 
-    emptyCart(customerId: string, cartId: string, request: EmptyCartCommand): Observable<void> {
-        let url_ = this.baseUrl + "/api/customers/{customerId}/emptyCart/{cartId}";
-        if (customerId === undefined || customerId === null)
-            throw new Error("The parameter 'customerId' must be defined.");
-        url_ = url_.replace("{customerId}", encodeURIComponent("" + customerId));
-        if (cartId === undefined || cartId === null)
-            throw new Error("The parameter 'cartId' must be defined.");
-        url_ = url_.replace("{cartId}", encodeURIComponent("" + cartId));
+    emptyCart(request: EmptyCartCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/customers/emptyCart";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(request);
@@ -875,14 +860,8 @@ export class CustomerClient implements ICustomerClient {
         return _observableOf(null as any);
     }
 
-    removeFromCart(customerId: string, cartItemId: string, request: RemoveCartItemCommand): Observable<void> {
-        let url_ = this.baseUrl + "/api/customers/{customerId}/removeCartItem/{cartItemId}";
-        if (customerId === undefined || customerId === null)
-            throw new Error("The parameter 'customerId' must be defined.");
-        url_ = url_.replace("{customerId}", encodeURIComponent("" + customerId));
-        if (cartItemId === undefined || cartItemId === null)
-            throw new Error("The parameter 'cartItemId' must be defined.");
-        url_ = url_.replace("{cartItemId}", encodeURIComponent("" + cartItemId));
+    removeFromCart(request: RemoveCartItemCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/customers/removeCartItem";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(request);
@@ -943,14 +922,8 @@ export class CustomerClient implements ICustomerClient {
         return _observableOf(null as any);
     }
 
-    purchaseProduct(customerId: string, cartId: string, request: PurchaseFromCartCommand): Observable<void> {
-        let url_ = this.baseUrl + "/api/customers/{customerId}/purchase/{cartId}";
-        if (customerId === undefined || customerId === null)
-            throw new Error("The parameter 'customerId' must be defined.");
-        url_ = url_.replace("{customerId}", encodeURIComponent("" + customerId));
-        if (cartId === undefined || cartId === null)
-            throw new Error("The parameter 'cartId' must be defined.");
-        url_ = url_.replace("{cartId}", encodeURIComponent("" + cartId));
+    purchaseProduct(request: PurchaseFromCartCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/customers/purchase";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(request);
@@ -3069,10 +3042,11 @@ export class Cart implements ICart {
             this.id = _data["id"];
             this.customer = _data["customer"] ? Customer.fromJS(_data["customer"]) : <any>undefined;
             this.cartValue = _data["cartValue"];
-            if (Array.isArray(_data["cartItems"])) {
+            //this.cartItems = _data["cartItems"];
+            if (Object(_data["cartItems"])) {
                 this.cartItems = [] as any;
-                for (let item of _data["cartItems"])
-                    this.cartItems!.push(CartItem.fromJS(item));
+                for (let item of _data["cartItems"].$values)
+                    this.cartItems!.push(item);
             }
         }
     }

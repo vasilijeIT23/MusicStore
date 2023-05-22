@@ -1,1 +1,19 @@
-<p>cart works!</p>
+<div class="cart-container">
+    <h2 class="cart-title">Your Cart</h2>
+    <div *ngIf="cartItems.length === 0" class="empty-cart-message">Your cart is empty.</div>
+    <div *ngFor="let item of cartItems" class="cart-item">
+      <div class="item-details">
+        <div class="item-info">
+          <h3 class="item-name" *ngIf="item.product!== undefined">{{ item.product.name }}</h3>
+          <p class="item-price" *ngIf="item.product!== undefined">{{ item.product.price| currency }}</p>
+          <p class="item-quantity">Quantity: {{ item.quantity }}</p>
+        </div>
+      </div>
+      <button class="remove-button" (click)="removeFromCart(item.id!)">Remove</button>
+    </div>
+    <h3 class="item-name" >Amount to pay {{ cart[0].cartValue }}</h3>
+    <button class="remove-button" (click)="onCheckout()">Checkout</button>
+    <button class="remove-button" (click)="emptyCart()">Empty cart</button>
+  </div>
+  
+  

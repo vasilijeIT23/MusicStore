@@ -9,6 +9,9 @@
           <p>In Stock: {{ product.inStock }}</p>
           <p>Price: {{ product.price }}</p>
         </mat-card-content>
+        <mat-card-content>
+          <button mat-button-raised (click)="onAddToCart(product)">Add to cart</button>
+        </mat-card-content>
         <mat-card-actions>
           <button mat-icon-button color="primary" [matMenuTriggerFor]="menu">
             <mat-icon>more_vert</mat-icon>

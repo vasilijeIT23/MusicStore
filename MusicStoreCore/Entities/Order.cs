@@ -14,7 +14,7 @@
         {
             Customer = customer;
             OrderDate = DateTime.Now;
-            Price = 0;
+            Price = 0.0d;
             OrderItems = new List<OrderItem>();
         }
     }

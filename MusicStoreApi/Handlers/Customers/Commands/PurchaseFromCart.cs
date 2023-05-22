@@ -56,6 +56,7 @@ namespace MusicStoreApi.Handlers.Customers.Commands
 
                 double orderPrice = 0;
                 var order = new Order(customer);
+                _orderRepository.Create(order);
 
                 foreach(var item in cart.CartItems)
                 {
@@ -68,6 +69,7 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                 order.Price = orderPrice;
                 _orderRepository.SaveChanges();
 
+                cart.CartValue = 0.0;
                 cart.CartItems.Clear();
                 _cartRepository.SaveChanges();
 

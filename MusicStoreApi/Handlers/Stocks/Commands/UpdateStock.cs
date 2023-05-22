@@ -10,7 +10,7 @@ namespace MusicStoreApi.Handlers.Stocks.Commands
     public static class UpdateStock
     {
         [PublicAPI]
-        public class Command : IRequest<Stock>
+        public class Command : IRequest<bool>
         {
             public Guid Id { get; set; }
             public int Quantity { get; set; }
@@ -26,7 +26,7 @@ namespace MusicStoreApi.Handlers.Stocks.Commands
         }
 
         [UsedImplicitly]
-        public class RequestHandler : IRequestHandler<Command, Stock>
+        public class RequestHandler : IRequestHandler<Command, bool>
         {
             private readonly IRepository<Stock> _repository;
             private readonly IMapper _mapper;
@@ -36,7 +36,7 @@ namespace MusicStoreApi.Handlers.Stocks.Commands
                 _repository = repository ?? throw new ArgumentNullException(nameof(repository));
                 _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             }
-            public Task<Stock> Handle(Command request, CancellationToken cancellationToken)
+            public Task<bool> Handle(Command request, CancellationToken cancellationToken)
             {
                 if (request == null)
                 {
@@ -53,7 +53,7 @@ namespace MusicStoreApi.Handlers.Stocks.Commands
                 _mapper.Map(request, stock);
                 _repository.SaveChanges();
 
-                return Task.FromResult(stock);
+                return Task.FromResult(true);
             }
         }
     }
