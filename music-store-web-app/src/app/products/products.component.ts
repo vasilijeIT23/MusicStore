@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { AddToCartCommand, CustomerClient, DeleteProductCommand, Product, ProductClient } from '../api/api-reference';
 import { Router } from '@angular/router';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent implements OnInit{
   displayedColumns: string[] = ['name', 'inStock', 'price', 'actions'];
-
   id = localStorage.getItem('id');
 
   pageSize = 5;
@@ -20,13 +21,18 @@ export class ProductsComponent implements OnInit {
   currentPage: number = 0;
   totalItems: number = 0;
 
+  filterText: string = '';
+  sortBy: string = 'name';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+
   products: Product[] = [];
 
   constructor(private productClient: ProductClient,
     private customerClient: CustomerClient,
     private router: Router,
-    private snackBar: MatSnackBar) {}
-
+    private snackBar: MatSnackBar) {} 
+  
   ngOnInit() {
     this.router.navigate([this.router.url]) 
     this.productClient.getAll().subscribe(result => {

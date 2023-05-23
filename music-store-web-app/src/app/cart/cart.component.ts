@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Cart, CartClient, CartItem, CustomerClient, EmptyCartCommand, PurchaseFromCartCommand, RemoveCartItemCommand } from '../api/api-reference';
+import { Cart, CartClient, CartItem, CustomerClient, EmptyCartCommand, PromoteCustomerCommand, PurchaseFromCartCommand, RemoveCartItemCommand } from '../api/api-reference';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -34,12 +34,14 @@ export class CartComponent {
     });
   }
 
+
   removeFromCart(cartItemId: string){
     this.customerClient.removeFromCart(new RemoveCartItemCommand({
       cartItemId: cartItemId
     })
     ).subscribe(_ => {
       this.snackBar.open("Cart item removed successfully")
+      this.router.navigate([this.router.url]) 
     });
   }
 
@@ -48,6 +50,7 @@ export class CartComponent {
       customerId: this.id
     })).subscribe(_ => {
       this.snackBar.open("Cart emptied successfully");
+      this.router.navigate([this.router.url]);
     });
   }
 
@@ -56,6 +59,7 @@ export class CartComponent {
       customerId: this.id
     })).subscribe(_ => {
       this.snackBar.open("Products purchased successfully!");
+      this.router.navigate([this.router.url]) ;
     });
   }
 }

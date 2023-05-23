@@ -383,7 +383,7 @@ export interface ICustomerClient {
     emptyCart(request: EmptyCartCommand): Observable<void>;
     removeFromCart(request: RemoveCartItemCommand): Observable<void>;
     purchaseProduct(request: PurchaseFromCartCommand): Observable<void>;
-    promote(id: string, request: PromoteCustomerCommand): Observable<Customer>;
+    promote(request: PromoteCustomerCommand): Observable<Customer>;
     reviewProduct(customerId: string, productId: string): Observable<void>;
     authenticate(request: AuthenticateCustomerCommand): Observable<Customer>;
     generateJwtToken(request: GenerateJwtTokenCommand): Observable<string>;
@@ -984,11 +984,8 @@ export class CustomerClient implements ICustomerClient {
         return _observableOf(null as any);
     }
 
-    promote(id: string, request: PromoteCustomerCommand): Observable<Customer> {
-        let url_ = this.baseUrl + "/api/customers/{id}/promote";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+    promote(request: PromoteCustomerCommand): Observable<Customer> {
+        let url_ = this.baseUrl + "/api/customers/promote";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(request);
@@ -1239,7 +1236,7 @@ export class CustomerClient implements ICustomerClient {
 
 export interface IOrderClient {
     find(): Observable<Order[]>;
-    getAll(): Observable<Warehouse[]>;
+    getAll(): Observable<Order[]>;
     getById(id: string): Observable<Order>;
     create(order: Order): Observable<Order>;
     update(order: Order): Observable<Order>;
@@ -1314,7 +1311,7 @@ export class OrderClient implements IOrderClient {
         return _observableOf(null as any);
     }
 
-    getAll(): Observable<Warehouse[]> {
+    getAll(): Observable<Order[]> {
         let url_ = this.baseUrl + "/api/orders/all";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1333,14 +1330,14 @@ export class OrderClient implements IOrderClient {
                 try {
                     return this.processGetAll(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Warehouse[]>;
+                    return _observableThrow(e) as any as Observable<Order[]>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Warehouse[]>;
+                return _observableThrow(response_) as any as Observable<Order[]>;
         }));
     }
 
-    protected processGetAll(response: HttpResponseBase): Observable<Warehouse[]> {
+    protected processGetAll(response: HttpResponseBase): Observable<Order[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1354,7 +1351,7 @@ export class OrderClient implements IOrderClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(Warehouse.fromJS(item));
+                    result200!.push(Order.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -3211,10 +3208,10 @@ export class Order implements IOrder {
             this.customer = _data["customer"] ? Customer.fromJS(_data["customer"]) : <any>undefined;
             this.orderDate = _data["orderDate"] ? new Date(_data["orderDate"].toString()) : <any>undefined;
             this.price = _data["price"];
-            if (Array.isArray(_data["orderItems"])) {
+            if (Object(_data["orderItems"])) {
                 this.orderItems = [] as any;
-                for (let item of _data["orderItems"])
-                    this.orderItems!.push(OrderItem.fromJS(item));
+                for (let item of _data["orderItems"].$values)
+                    this.orderItems!.push(item);
             }
         }
     }
@@ -4022,50 +4019,6 @@ export interface IGenerateJwtTokenCommand {
     username?: string;
 }
 
-export class Warehouse implements IWarehouse {
-    id?: string;
-    name?: string;
-    capacity?: number;
-
-    constructor(data?: IWarehouse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.capacity = _data["capacity"];
-        }
-    }
-
-    static fromJS(data: any): Warehouse {
-        data = typeof data === 'object' ? data : {};
-        let result = new Warehouse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["capacity"] = this.capacity;
-        return data;
-    }
-}
-
-export interface IWarehouse {
-    id?: string;
-    name?: string;
-    capacity?: number;
-}
-
 export class DeleteOrderCommand implements IDeleteOrderCommand {
     id?: string;
 
@@ -4396,6 +4349,50 @@ export interface IStock {
     product?: Product;
     warehouse?: Warehouse;
     quantity?: number;
+}
+
+export class Warehouse implements IWarehouse {
+    id?: string;
+    name?: string;
+    capacity?: number;
+
+    constructor(data?: IWarehouse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.capacity = _data["capacity"];
+        }
+    }
+
+    static fromJS(data: any): Warehouse {
+        data = typeof data === 'object' ? data : {};
+        let result = new Warehouse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["capacity"] = this.capacity;
+        return data;
+    }
+}
+
+export interface IWarehouse {
+    id?: string;
+    name?: string;
+    capacity?: number;
 }
 
 export class CreateStockCommand implements ICreateStockCommand {

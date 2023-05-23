@@ -17,6 +17,7 @@ import { EditWarehouseComponent } from './warehouses/edit-warehouse/edit-warehou
 import { EditProductTypeComponent } from './product-types/edit-product-type/edit-product-type.component';
 import { EditStockComponent } from './stock/edit-stock/edit-stock.component';
 import { ProfileComponent } from './profile/profile.component';
+import { OrdersComponent } from './orders/orders.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent},
@@ -34,6 +35,7 @@ const routes: Routes = [
   { path: 'stock', component: StockComponent, canActivate: [AuthGuard]},
   { path: 'stock/edit/:id', component: EditStockComponent, canActivate: [AuthGuard]},
   { path: 'cart/:id', component: CartComponent},
+  { path: 'orders', component: OrdersComponent},
   { path: 'productTypes', component: ProductTypesComponent, canActivate: [AuthGuard]},
   { path: 'productTypes/edit/:id', component: EditProductTypeComponent, canActivate: [AuthGuard]},
   { path: 'productTypes/create', component: EditProductTypeComponent, canActivate: [AuthGuard]},

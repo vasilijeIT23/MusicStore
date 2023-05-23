@@ -3,6 +3,7 @@ using MediatR;
 using MusicStoreApi.Exceptions;
 using MusicStoreApi.Repository;
 using MusicStoreCore.Entities;
+using MusicStoreCore.Enums;
 
 namespace MusicStoreApi.Handlers.Customers.Commands
 {
@@ -55,6 +56,7 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                 }
 
                 double orderPrice = 0;
+                double discount = 1;
                 var order = new Order(customer);
                 _orderRepository.Create(order);
 
@@ -66,12 +68,30 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                     _orderItemRepository.SaveChanges();
                 }
 
-                order.Price = orderPrice;
+                if(customer.Status == Status.Advanced && customer.StatusExpirationDate > DateTime.UtcNow) 
+                {
+                    discount = 0.8;
+                }
+                order.Price = orderPrice * discount;
+
+                customer.MoneySpent += orderPrice * discount;
+                customer.Orders.Add(order);
                 _orderRepository.SaveChanges();
+                _customerRepository.SaveChanges();
 
                 cart.CartValue = 0.0;
                 cart.CartItems.Clear();
                 _cartRepository.SaveChanges();
+
+                if (customer.Status != Status.Advanced && customer.MoneySpent > 1000)
+                {
+                    if (customer.Orders.Count(x => x.OrderDate > DateTime.Now.AddDays(-365)) >= 4)
+                    {
+                        customer.Status = Status.Advanced;
+                        customer.StatusExpirationDate = DateTime.Now.AddDays(365);
+                        _customerRepository.SaveChanges();
+                    }
+                }
 
                 return Task.FromResult(order);
             }

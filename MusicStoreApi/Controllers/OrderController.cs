@@ -27,7 +27,7 @@ namespace MusicStoreApi.Controllers
         }
 
         [HttpGet("all")]
-        [ProducesResponseType(type: typeof(IEnumerable<Warehouse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(type: typeof(IEnumerable<Order>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAll()
         {
             var orders = await _mediator.Send(new GetAllOrders.Query());

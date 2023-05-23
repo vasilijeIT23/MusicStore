@@ -12,8 +12,8 @@
       <button class="remove-button" (click)="removeFromCart(item.id!)">Remove</button>
     </div>
     <h3 class="item-name" >Amount to pay {{ cart[0].cartValue }}</h3>
-    <button class="remove-button" (click)="onCheckout()">Checkout</button>
-    <button class="remove-button" (click)="emptyCart()">Empty cart</button>
+    <button class="empty-button" (click)="emptyCart()">Empty cart</button>
+    <button class="checkout-button" (click)="onCheckout()">Checkout</button>
   </div>
   
   

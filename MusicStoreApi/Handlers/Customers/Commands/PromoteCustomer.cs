@@ -49,6 +49,7 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                 }
 
                 customer.Status = Status.Advanced;
+                customer.StatusExpirationDate = DateTime.Now.AddDays(365);
                 _repository.SaveChanges();
 
                 return Task.FromResult(customer);

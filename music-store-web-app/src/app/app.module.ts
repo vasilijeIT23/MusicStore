@@ -38,6 +38,8 @@ import { EditWarehouseComponent } from './warehouses/edit-warehouse/edit-warehou
 import { EditProductTypeComponent } from './product-types/edit-product-type/edit-product-type.component';
 import { EditStockComponent } from './stock/edit-stock/edit-stock.component';
 import { ProfileComponent } from './profile/profile.component';
+import { OrdersComponent } from './orders/orders.component';
+import {MatSortModule} from '@angular/material/sort';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -75,6 +77,7 @@ export class TokenInterceptor implements HttpInterceptor {
     EditProductTypeComponent,
     EditStockComponent,
     ProfileComponent,
+    OrdersComponent,
   ],
   imports: [
     BrowserModule,
@@ -99,6 +102,7 @@ export class TokenInterceptor implements HttpInterceptor {
     MatOptionModule,
     MatDialogModule,
     MatPaginatorModule,
+    MatSortModule
   ],
   providers: [
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },

@@ -52,7 +52,7 @@ export class LoginComponent {
 
         localStorage.setItem('role', this.role!)
         localStorage.setItem('id', this.id!);
-        
+
         this.router.navigate([`/products/`]);
       });
     }, error => {

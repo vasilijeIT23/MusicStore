@@ -30,6 +30,10 @@
           <mat-icon class="nav-icon">shopping_cart</mat-icon>
           <span>My Cart</span>
         </a>
+        <a mat-list-item routerLink="/orders" >
+          <mat-icon class="nav-icon">assignment_turned_in</mat-icon>
+          <span>Orders</span>
+        </a>
       </mat-nav-list>
       <mat-nav-list *ngIf="role === 'Admin'">
         <div class="nav-header">
@@ -43,6 +47,10 @@
         <a mat-list-item (click)="onCart()" >
           <mat-icon class="nav-icon">shopping_cart</mat-icon>
           <span>My Cart</span>
+        </a>
+        <a mat-list-item routerLink="/orders" >
+          <mat-icon class="nav-icon">assignment_turned_in</mat-icon>
+          <span>Orders</span>
         </a>
         <a mat-list-item routerLink="/customers" >
           <mat-icon class="nav-icon">people</mat-icon>

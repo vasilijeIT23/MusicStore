@@ -120,7 +120,7 @@ namespace MusicStoreApi.Controllers
             return response == null ? Ok(response) : BadRequest();
         }
 
-        [HttpPut("{id}/promote")]
+        [HttpPut("promote")]
         [ProducesResponseType(type: typeof(Customer), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]

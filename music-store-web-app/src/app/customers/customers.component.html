@@ -1,59 +1,69 @@
 <h2>Customers</h2>
 
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+</mat-form-field>
+
 <div class="table-container">
-  <table mat-table [dataSource]="customers" class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
     <ng-container matColumnDef="firstName">
-      <th mat-header-cell *matHeaderCellDef>First Name</th>
-      <td mat-cell *matCellDef="let customer">{{ customer.firstName }}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+      <td mat-cell *matCellDef="let dataSource">{{ dataSource.firstName }}</td>
     </ng-container>
 
     <ng-container matColumnDef="lastName">
-      <th mat-header-cell *matHeaderCellDef>Last Name</th>
-      <td mat-cell *matCellDef="let customer">{{ customer.lastName }}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+      <td mat-cell *matCellDef="let dataSource">{{ dataSource.lastName }}</td>
     </ng-container>
 
     <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef>Email</th>
-      <td mat-cell *matCellDef="let customer">{{ customer.email }}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+      <td mat-cell *matCellDef="let dataSource">{{ dataSource.email }}</td>
     </ng-container>
 
     <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
-      <td mat-cell *matCellDef="let customer">{{ customer.status === 1 ? 'Regular' : 'Advanced' }}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+      <td mat-cell *matCellDef="let dataSource">{{ dataSource.status === 1 ? 'Regular' : 'Advanced' }}</td>
     </ng-container>
 
     <ng-container matColumnDef="role">
-      <th mat-header-cell *matHeaderCellDef>Role</th>
-      <td mat-cell *matCellDef="let customer">{{ customer.role === 1 ? 'Regular' : 'Admin' }}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
+      <td mat-cell *matCellDef="let dataSource">{{ dataSource.role === 1 ? 'Regular' : 'Admin' }}</td>
     </ng-container>
 
     <ng-container matColumnDef="statusExpirationDate">
-      <th mat-header-cell *matHeaderCellDef>Expiration Date</th>
-      <td mat-cell *matCellDef="let customer">{{ customer.statusExpirationDate }}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Expiration Date</th>
+      <td mat-cell *matCellDef="let dataSource">{{ dataSource.statusExpirationDate }}</td>
     </ng-container>
 
     <ng-container matColumnDef="moneySpent">
-      <th mat-header-cell *matHeaderCellDef>Money Spent</th>
-      <td mat-cell *matCellDef="let customer">{{ customer.moneySpent }}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Money Spent</th>
+      <td mat-cell *matCellDef="let dataSource">{{ dataSource.moneySpent }}</td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Actions</th>
-      <td mat-cell *matCellDef="let customer">
+      <td mat-cell *matCellDef="let dataSource">
         <button mat-icon-button color="primary" [matMenuTriggerFor]="menu">
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="onUpdate(customer)">Update</button>
-          <button mat-menu-item (click)="onDelete(customer)">Delete</button>
-          <button mat-menu-item (click)="onCart(customer.id)"> Cart </button>
+          <button mat-menu-item (click)="onUpdate(dataSource)">Update</button>
+          <button mat-menu-item (click)="onDelete(dataSource)">Delete</button>
+          <button mat-menu-item (click)="onCart(dataSource.id)"> Cart </button>
         </mat-menu>
       </td>
     </ng-container>
 
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+    </tr>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
 </div>
 
 
