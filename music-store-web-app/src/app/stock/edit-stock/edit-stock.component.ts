@@ -24,22 +24,30 @@ export class EditStockComponent {
     quantity: new FormControl(0, { nonNullable: true }),
   });
 
-  ngOnInit(){
+  ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') ?? undefined;
     if (this.id) {
-      this.client.getById(this.id).subscribe(data => this.patchForm(data));
+      this.client.getById(this.id).subscribe(data => {
+        if (data !== null) {
+          this.patchForm(data)
+        }
+        else {
+          this.snackBar.open("Something went wrong");
+          console.error("Null response from server");
+        }
+      });
     }
   }
-  onSubmit(){
+  onSubmit() {
     this.client.update(new UpdateStockCommand({
-        id: this.formGroup.controls.id.value,
-        quantity: this.formGroup.controls.quantity.value
+      id: this.formGroup.controls.id.value,
+      quantity: this.formGroup.controls.quantity.value
     })).subscribe(_ => {
-        this.snackBar.open('Stock updated');
-        this.router.navigate([`/stock/`]);
+      this.snackBar.open('Stock updated');
+      this.router.navigate([`/stock/`]);
     });
   }
-  
+
   private readonly patchForm = (stock: Stock) => {
     this.formGroup.controls.id.patchValue(this.id!);
     this.formGroup.controls.quantity.patchValue(stock.quantity!);

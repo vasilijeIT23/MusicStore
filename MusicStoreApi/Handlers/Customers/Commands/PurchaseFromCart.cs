@@ -23,14 +23,19 @@ namespace MusicStoreApi.Handlers.Customers.Commands
             private readonly IRepository<OrderItem> _orderItemRepository;
             private readonly IRepository<Cart> _cartRepository;
             private readonly IRepository<CartItem> _cartItemRepository;
+            private readonly IRepository<Stock> _stockRepository;
+            private readonly IRepository<Warehouse> _warehouseRepository;
 
-            public RequestHandler(IRepository<CartItem> cartItemRepository, IRepository<Customer> customerRepository, IRepository<Order> orderRepository, IRepository<OrderItem> orderItemRepository, IRepository<Cart> cartRepository)
+            public RequestHandler(IRepository<CartItem> cartItemRepository, IRepository<Customer> customerRepository, IRepository<Order> orderRepository, 
+                IRepository<OrderItem> orderItemRepository, IRepository<Cart> cartRepository, IRepository<Stock> stockRepository, IRepository<Warehouse> warehouseRepository)
             {
                 _cartItemRepository = cartItemRepository ?? throw new ArgumentNullException(nameof(cartItemRepository));
                 _cartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
                 _customerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
                 _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
                 _orderItemRepository = orderItemRepository ?? throw new ArgumentNullException(nameof(orderItemRepository));
+                _stockRepository = stockRepository ?? throw new ArgumentNullException(nameof(stockRepository));
+                _warehouseRepository = warehouseRepository ?? throw new ArgumentNullException(nameof(warehouseRepository));
             }
             public Task<Order> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -55,6 +60,8 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                     throw new RequirementsNotSatisfiedException();
                 }
 
+
+
                 double orderPrice = 0;
                 double discount = 1;
                 var order = new Order(customer);
@@ -62,19 +69,23 @@ namespace MusicStoreApi.Handlers.Customers.Commands
 
                 foreach(var item in cart.CartItems)
                 {
+                    var stock = _stockRepository.Find(x => x.Product.Id == item.Product.Id).FirstOrDefault();
+                    stock.Quantity -= item.Quantity;
+
+                    var warehouse = _warehouseRepository.Find(x => x.Id == stock.Warehouse.Id).SingleOrDefault();
+                    warehouse.Capacity += item.Quantity;
+
                     var orderItem = new OrderItem(item.Product, order, item.Quantity);
                     order.OrderItems.Add(orderItem);
                     orderPrice += item.Quantity*item.Product.Price;
-                    _orderItemRepository.SaveChanges();
                 }
 
-                if(customer.Status == Status.Advanced && customer.StatusExpirationDate > DateTime.UtcNow) 
+                if (customer.Status == Status.Advanced && customer.StatusExpirationDate > DateTime.UtcNow) 
                 {
                     discount = 0.8;
                 }
                 order.Price = orderPrice * discount;
 
-                customer.MoneySpent += orderPrice * discount;
                 customer.Orders.Add(order);
                 _orderRepository.SaveChanges();
                 _customerRepository.SaveChanges();
@@ -92,6 +103,8 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                         _customerRepository.SaveChanges();
                     }
                 }
+                _orderItemRepository.SaveChanges();
+                _stockRepository.SaveChanges();
 
                 return Task.FromResult(order);
             }

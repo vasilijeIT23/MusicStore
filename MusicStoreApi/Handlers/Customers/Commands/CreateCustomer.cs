@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using MediatR;
+using MusicStoreApi.Exceptions;
 using MusicStoreApi.Repository;
 using MusicStoreCore.Entities;
 using System.Security.Cryptography;
@@ -36,7 +37,14 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                     throw new ArgumentNullException(nameof(request));
                 }
 
-                var existingCustomer = _customerRepository.Find(x => x.Email == request.Email || x.Username == request.Username).SingleOrDefault();
+                if (request.FirstName == "" ||
+                    request.LastName == "" || request.Password.Length < 8 ||
+                    request.Email.Contains('@') || request.Email.Contains(".com") || request.Username.Length < 8) 
+                {
+                    throw new InvalidInputValueException();
+                }
+
+                var existingCustomer = _customerRepository.Find(x => x.Email == request.Email && x.Username == request.Username).SingleOrDefault();
 
                 if (existingCustomer != null)
                 {

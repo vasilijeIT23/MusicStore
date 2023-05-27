@@ -99,7 +99,7 @@ namespace MusicStoreApi.Controllers
         }
 
         [HttpPut("removeCartItem")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType( (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> RemoveFromCart([FromBody] RemoveCartItem.Command request)
@@ -110,14 +110,14 @@ namespace MusicStoreApi.Controllers
         }
 
         [HttpPost("purchase")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(type: typeof(Order), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> PurchaseProduct([FromBody] PurchaseFromCart.Command request)
         {
             var response = await _mediator.Send(request);
 
-            return response == null ? Ok(response) : BadRequest();
+            return response != null ? Ok(response) : BadRequest();
         }
 
         [HttpPut("promote")]
@@ -156,6 +156,16 @@ namespace MusicStoreApi.Controllers
         [ProducesResponseType(type: typeof(string), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GenerateJwtToken([FromBody] GenerateJwtToken.Command request)
+        {
+            var response = await _mediator.Send(request);
+
+            return response != null ? Ok(response) : BadRequest();
+        }
+
+        [HttpPost("credentials")]
+        [ProducesResponseType(type: typeof(Customer), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> ChangeCredentials([FromBody] ChangeCredentials.Command request)
         {
             var response = await _mediator.Send(request);
 

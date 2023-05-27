@@ -18,29 +18,40 @@ import { EditProductTypeComponent } from './product-types/edit-product-type/edit
 import { EditStockComponent } from './stock/edit-stock/edit-stock.component';
 import { ProfileComponent } from './profile/profile.component';
 import { OrdersComponent } from './orders/orders.component';
+import { StripeComponent } from './stripe/stripe.component';
+import { CreateStockComponent } from './stock/create-stock/create-stock.component';
+import { PaymentsComponent } from './payments/payments.component';
+import { AddToCartComponent } from './products/add-to-cart/add-to-cart.component';
+import { UpdateCredentialsComponent } from './profile/update-credentials/update-credentials.component';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent},
-  { path: 'register', component: RegisterComponent},
-  { path: 'customers', component: CustomersComponent},
-  { path: 'customers/edit/:id', component: EditCustomerComponent},
-  { path: 'profile', component: ProfileComponent},
-  { path: 'profile/edit/:id', component: EditCustomerComponent},
-  { path: 'products', component: ProductsComponent},
-  { path: 'products/create', component: EditProductComponent, canActivate: [AuthGuard]},
-  { path: 'products/edit/:id', component: EditProductComponent, canActivate: [AuthGuard]},
-  { path: 'warehouses', component: WarehousesComponent, canActivate: [AuthGuard]},
-  { path: 'warehouses/edit/:id', component: EditWarehouseComponent, canActivate: [AuthGuard]},
-  { path: 'warehouses/create', component: EditWarehouseComponent, canActivate: [AuthGuard]},
-  { path: 'stock', component: StockComponent, canActivate: [AuthGuard]},
-  { path: 'stock/edit/:id', component: EditStockComponent, canActivate: [AuthGuard]},
-  { path: 'cart/:id', component: CartComponent},
-  { path: 'orders', component: OrdersComponent},
-  { path: 'productTypes', component: ProductTypesComponent, canActivate: [AuthGuard]},
-  { path: 'productTypes/edit/:id', component: EditProductTypeComponent, canActivate: [AuthGuard]},
-  { path: 'productTypes/create', component: EditProductTypeComponent, canActivate: [AuthGuard]},
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'customers', component: CustomersComponent, canActivate: [AuthGuard] },
+  { path: 'customers/edit/:id', component: EditCustomerComponent },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'profile/edit/:id', component: EditCustomerComponent },
+  { path: 'credentials/:id', component: UpdateCredentialsComponent },
+  { path: 'products', component: ProductsComponent },
+  { path: 'products/create', component: EditProductComponent, canActivate: [AuthGuard] },
+  { path: 'products/edit/:id', component: EditProductComponent, canActivate: [AuthGuard] },
+  { path: 'warehouses', component: WarehousesComponent, canActivate: [AuthGuard] },
+  { path: 'warehouses/edit/:id', component: EditWarehouseComponent, canActivate: [AuthGuard] },
+  { path: 'warehouses/create', component: EditWarehouseComponent, canActivate: [AuthGuard] },
+  { path: 'stock', component: StockComponent, canActivate: [AuthGuard] },
+  { path: 'stock/create/:id', component: CreateStockComponent, canActivate: [AuthGuard] },
+  { path: 'stock/edit/:id', component: EditStockComponent, canActivate: [AuthGuard] },
+  { path: 'cart/:id', component: CartComponent },
+  { path: 'add/to/cart/:id', component: AddToCartComponent },
+  { path: 'stripe', component: StripeComponent },
+  { path: 'orders', component: OrdersComponent, canActivate: [AuthGuard] },
+  { path: 'orders/:id', component: OrdersComponent },
+  { path: 'productTypes', component: ProductTypesComponent, canActivate: [AuthGuard] },
+  { path: 'productTypes/edit/:id', component: EditProductTypeComponent, canActivate: [AuthGuard] },
+  { path: 'productTypes/create', component: EditProductTypeComponent, canActivate: [AuthGuard] },
+  { path: 'payments', component: PaymentsComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: 'products', pathMatch: 'full' },
-  { path: '**', component: PageNotFoundComponent},
+  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({

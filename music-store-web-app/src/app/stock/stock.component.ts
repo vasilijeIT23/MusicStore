@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { DeleteStockCommand, Stock, StockClient } from '../api/api-reference';
+import { Stock, StockClient } from '../api/api-reference';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-stock',
@@ -12,12 +13,20 @@ export class StockComponent {
   displayedColumns: string[] = ['product', 'warehouse', 'quantity', 'actions'];
 
   stock: Stock[] = [];
-  constructor(private client: StockClient, private router: Router, public dialog: MatDialog) {}
+  constructor(private client: StockClient,
+    private router: Router,
+    public dialog: MatDialog,
+    private snackBar: MatSnackBar) { }
 
-  ngOnInit(){
+  ngOnInit() {
     this.client.getAll().subscribe(result => {
-      this.stock = result;
-      console.log(this.stock);
+      if (result !== null) {
+        this.stock = result;
+      }
+      else {
+        this.snackBar.open("Something went wrong");
+        console.error("Null response from server");
+      }
     });
   }
 

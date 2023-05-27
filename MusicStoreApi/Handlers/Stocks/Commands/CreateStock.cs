@@ -45,10 +45,18 @@ namespace MusicStoreApi.Handlers.Stocks.Commands
                     throw new EntityDoesntExistException();
                 }
 
+                if(request.Quantity > warehouse.Capacity)
+                {
+                    throw new RequirementsNotSatisfiedException();
+                }
+
+                warehouse.Capacity -= request.Quantity;
+
                 var stock = new Stock(product, warehouse, request.Quantity);
 
                 _stockRepository.Create(stock);
                 _stockRepository.SaveChanges();
+                _warehouseRepository.SaveChanges();
 
                 return Task.FromResult(stock);
             }

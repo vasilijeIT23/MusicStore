@@ -5,19 +5,21 @@
       <div class="form-group">
         <mat-form-field class="form-field">
           <label for="firstName">First Name</label>
-          <input id="firstName" type="text" formControlName="firstName" required>
+          <input matInput id="firstName" type="text" formControlName="firstName" required>
         </mat-form-field>
       </div>
+      
       <div class="form-group">
         <mat-form-field class="form-field">
           <label for="lastName">Last Name</label>
-          <input id="lastName" type="text" formControlName="lastName" required>
+          <input matInput id="lastName" type="text" formControlName="lastName" required>
         </mat-form-field>
       </div>
+      
       <div class="form-group">
         <mat-form-field class="form-field">
           <label for="email">Email</label>
-          <input id="email" type="email" formControlName="email" required placeholder="Ex. pat@example.com">
+          <input matInput id="email" type="email" formControlName="email" required placeholder="Ex. pat@example.com">
           <mat-error *ngIf="formGroup.get('email')?.hasError('email') && formGroup.get('email')?.dirty">
             Please enter a valid email address
           </mat-error>
@@ -26,18 +28,23 @@
           </mat-error>
         </mat-form-field>
       </div>
+
       <div class="form-group">
         <mat-form-field class="form-field">
           <label for="username">Username</label>
-          <input id="username" type="text" formControlName="username" required>
+          <input matInput id="username" type="text" formControlName="username" required minlength="8">
+          <mat-error *ngIf="formGroup.controls.username.errors?.['minlength']">Username must be at least 8 characters long.</mat-error>
         </mat-form-field>
       </div>
+      
       <div class="form-group">
         <mat-form-field class="form-field">
           <label for="password">Password</label>
-          <input id="password" type="password" formControlName="password" required>
+          <input matInput id="password" type="password" formControlName="password" required minlength="8">
+          <mat-error *ngIf="formGroup.controls.password.errors?.['minlength']">Password must be at least 8 characters long.</mat-error>
         </mat-form-field>
       </div>
+      
       <div class="form-group">
         <button type="submit" (click)="register()">Register</button>
       </div>
@@ -45,4 +52,3 @@
     <p class="register-text">Already have an account? <a href="/login">Login</a></p>
   </div>
 </div>
-  

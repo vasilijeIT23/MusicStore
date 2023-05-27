@@ -19,7 +19,7 @@ export class EditCustomerComponent {
   status = new Map<Status, string>([
     [Status.Advanced, 'Advanced'],
     [Status.Regular, 'Regular']
-  ])  
+  ])
 
   constructor(private route: ActivatedRoute,
     private client: CustomerClient,
@@ -27,50 +27,55 @@ export class EditCustomerComponent {
     private readonly snackBar: MatSnackBar,
     public dialog: MatDialog) { }
 
-  isDisabled: boolean = true;    
+  isDisabled: boolean = true;
   id: string = '';
 
   formGroup = new FormGroup({
     id: new FormControl('', { nonNullable: true }),
     firstName: new FormControl('', { nonNullable: true }),
     lastName: new FormControl('', { nonNullable: true }),
-    email: new FormControl('',{ nonNullable: true , validators: [Validators.required, Validators.email]}),
+    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
     role: new FormControl<Role>(Role.Regular, { nonNullable: true }),
   });
 
-  ngOnInit(){
-    //const dialogRef = this.dialog.open(EditCustomerComponent, {restoreFocus: false});
+  ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id')!;
     this.client.getById(this.id).subscribe(data => {
       this.patchForm(data);
     });
   }
-  onSubmit(){
+  onSubmit() {
     this.client.update(new UpdateCustomerCommand({
-        id: this.formGroup.controls.id.value,
-        firstName: this.formGroup.controls.firstName.value,
-        lastName: this.formGroup.controls.lastName.value,
-        email: this.formGroup.controls.email.value,
-        role: this.formGroup.controls.role.value
-    })).subscribe(_ => {
+      id: this.formGroup.controls.id.value,
+      firstName: this.formGroup.controls.firstName.value,
+      lastName: this.formGroup.controls.lastName.value,
+      email: this.formGroup.controls.email.value,
+      role: this.formGroup.controls.role.value
+    })).subscribe(response => {
+      if (response !== null) {
         this.snackBar.open('Customer updated');
         this.router.navigate([`/customers/`]);
+      }
+      else {
+        this.snackBar.open("Something went wrong");
+        console.error("Null response from server");
+      }
     });
   }
 
-  get email(){
+  get email() {
     return this.formGroup.controls.email;
   }
 
-  disabled(){
+  disabled() {
     console.log();
-    if(this.route.snapshot.url[0].path === 'profile'){
+    if (this.route.snapshot.url[0].path === 'profile') {
       this.isDisabled = false;
       return this.isDisabled;
     }
     return this.isDisabled;
   }
-  
+
   private readonly patchForm = (customer: Customer) => {
     this.formGroup.controls.id.patchValue(this.id);
     this.formGroup.controls.firstName.patchValue(customer.firstName!);

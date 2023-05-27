@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Cart, CartClient, CartItem, CustomerClient, EmptyCartCommand, PromoteCustomerCommand, PurchaseFromCartCommand, RemoveCartItemCommand } from '../api/api-reference';
+import { Cart, CartClient, CartItem, CustomerClient, EmptyCartCommand, PromoteCustomerCommand, PurchaseFromCartCommand, RemoveCartItemCommand, StripeApiClient } from '../api/api-reference';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -17,35 +17,40 @@ export class CartComponent {
   id: string | undefined;
 
   constructor(private cartClient: CartClient,
+    private stripeClient: StripeApiClient,
     private customerClient: CustomerClient,
-     private router: Router,
-      private route: ActivatedRoute,
-      private snackBar: MatSnackBar) {}
+    private router: Router,
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar) { }
 
-  ngOnInit(){
+  ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id')!;
     this.cartClient.getAll().subscribe(result => {
-      this.cart = result.filter(x => x.customer!.id === this.id);
-      //console.log(result);
-      if(this.cart.length === 1){
-        console.log(this.cart[0]?.cartItems);
-        this.cartItems = this.cart[0]?.cartItems!;
+      if (result !== null) {
+        this.cart = result.filter(x => x.customer!.id === this.id);
+        if (this.cart.length === 1) {
+          this.cartItems = this.cart[0]?.cartItems!;
+        }
+      }
+      else {
+        this.snackBar.open("Something went wrong")
+        console.error("Empty request")
       }
     });
   }
 
 
-  removeFromCart(cartItemId: string){
+  removeFromCart(cartItemId: string) {
     this.customerClient.removeFromCart(new RemoveCartItemCommand({
       cartItemId: cartItemId
     })
     ).subscribe(_ => {
       this.snackBar.open("Cart item removed successfully")
-      this.router.navigate([this.router.url]) 
+      this.router.navigate([this.router.url])
     });
   }
 
-  emptyCart(){
+  emptyCart() {
     this.customerClient.emptyCart(new EmptyCartCommand({
       customerId: this.id
     })).subscribe(_ => {
@@ -54,12 +59,7 @@ export class CartComponent {
     });
   }
 
-  onCheckout(){
-    this.customerClient.purchaseProduct(new PurchaseFromCartCommand({
-      customerId: this.id
-    })).subscribe(_ => {
-      this.snackBar.open("Products purchased successfully!");
-      this.router.navigate([this.router.url]) ;
-    });
+  onCheckout() {
+    this.router.navigate([`stripe`]);
   }
 }

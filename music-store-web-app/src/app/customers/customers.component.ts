@@ -1,12 +1,11 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Customer, CustomerClient, DeleteCustomerCommand } from '../api/api-reference';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { EditCustomerComponent } from './edit-customer/edit-customer.component';
-import { MatMenuTrigger } from '@angular/material/menu';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-customers',
@@ -14,7 +13,7 @@ import {MatTableDataSource} from '@angular/material/table';
   styleUrls: ['./customers.component.css']
 })
 export class CustomersComponent implements OnInit {
-  
+
   displayedColumns: string[] = ['firstName', 'lastName', 'email', 'role', 'status', 'statusExpirationDate', 'moneySpent', 'actions'];
 
   @ViewChild(MatPaginator) paginator = null;
@@ -28,17 +27,32 @@ export class CustomersComponent implements OnInit {
   id: string = localStorage.getItem('id')!;
   role: string = localStorage.getItem('role')!;
 
-  constructor(private client: CustomerClient, private router: Router, public dialog: MatDialog) {}
+  constructor(private client: CustomerClient,
+    private router: Router,
+    public dialog: MatDialog,
+    private snackBar: MatSnackBar) { }
 
-  ngOnInit(){
+  ngOnInit() {
     this.client.getAll().subscribe(result => {
-      this.customers = result;
-      this.dataSource = new MatTableDataSource(this.customers);
+      if (result !== null) {
+        this.customers = result;
+        this.dataSource = new MatTableDataSource(this.customers);
+      }
+      else {
+        this.snackBar.open("Something went wrong");
+        console.error("Null response from server");
+      }
     });
     this.client.getById(this.id).subscribe(result => {
-      this.loggedCustomer.push(result);
-      console.log(this.loggedCustomer);
-      console.log(this.customers);
+      if (result !== null) {
+        this.loggedCustomer.push(result);
+        console.log(this.loggedCustomer);
+        console.log(this.customers);
+      }
+      else {
+        this.snackBar.open("Something went wrong");
+        console.error("Null response from server");
+      }
     });
   }
 
@@ -54,9 +68,9 @@ export class CustomersComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }  
+  }
 
-  onDelete(query: DeleteCustomerCommand){
+  onDelete(query: DeleteCustomerCommand) {
     this.client.delete(query).subscribe(_ => {
       this.customers = this.customers.filter(x => x.id !== query.id)
     })
@@ -66,8 +80,11 @@ export class CustomersComponent implements OnInit {
     this.router.navigate([`customers/edit/${customer.id}`]);
   }
 
-  onCart(customerId: string){
+  onCart(customerId: string) {
     this.router.navigate([`cart/${customerId}`]);
+  }
 
+  onOrder(customerId: string) {
+    this.router.navigate([`orders/${customerId}`]);
   }
 }

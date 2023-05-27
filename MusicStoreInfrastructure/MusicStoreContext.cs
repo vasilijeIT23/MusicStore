@@ -23,6 +23,7 @@ namespace MusicStoreInfrastructure
         DbSet<Order> Orders { get; set; }
         DbSet<OrderItem> OrderItems { get; set; }
         DbSet<Review> Reviews { get; set; }
+        DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

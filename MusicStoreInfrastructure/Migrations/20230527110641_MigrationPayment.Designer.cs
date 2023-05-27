@@ -12,8 +12,8 @@ using MusicStoreInfrastructure;
 namespace MusicStoreInfrastructure.Migrations
 {
     [DbContext(typeof(MusicStoreContext))]
-    [Migration("20230508210330_Migration1.0")]
-    partial class Migration10
+    [Migration("20230527110641_MigrationPayment")]
+    partial class MigrationPayment
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,14 +92,27 @@ namespace MusicStoreInfrastructure.Migrations
                     b.Property<double>("MoneySpent")
                         .HasColumnType("float");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Role")
                         .HasColumnType("int");
+
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("StatusExpirationDate")
+                    b.Property<DateTime?>("StatusExpirationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
@@ -118,12 +131,20 @@ namespace MusicStoreInfrastructure.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("PaymentCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("PaymentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("PaymentId");
 
                     b.ToTable("Orders");
                 });
@@ -149,7 +170,29 @@ namespace MusicStoreInfrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("orderItems");
+                    b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("MusicStoreCore.Entities.Payment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("MusicStoreCore.Entities.Product", b =>
@@ -196,6 +239,66 @@ namespace MusicStoreInfrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProductTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("2b735c00-19b8-4921-851e-0de5cb693d9c"),
+                            Category = 1,
+                            Name = "Gitara"
+                        },
+                        new
+                        {
+                            Id = new Guid("0e34649d-a8cd-47c4-8400-6259d183f05c"),
+                            Category = 1,
+                            Name = "Harmonika"
+                        },
+                        new
+                        {
+                            Id = new Guid("ba509490-218d-4e30-aafa-883ed4253347"),
+                            Category = 1,
+                            Name = "Flauta"
+                        },
+                        new
+                        {
+                            Id = new Guid("14350249-069c-455a-8ac5-2527edfdaa03"),
+                            Category = 1,
+                            Name = "Zvucnik"
+                        },
+                        new
+                        {
+                            Id = new Guid("6ce08fe2-2eed-4b53-a8e0-47e14148fa6b"),
+                            Category = 1,
+                            Name = "Pojacalo"
+                        });
+                });
+
+            modelBuilder.Entity("MusicStoreCore.Entities.Review", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("MusicStoreCore.Entities.Stock", b =>
@@ -239,6 +342,14 @@ namespace MusicStoreInfrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Warehouses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("fd569164-65d1-429b-8936-b53ebbd4edd3"),
+                            Capacity = 10000,
+                            Name = "Warehouse_1"
+                        });
                 });
 
             modelBuilder.Entity("MusicStoreCore.Entities.Cart", b =>
@@ -279,7 +390,15 @@ namespace MusicStoreInfrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MusicStoreCore.Entities.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("MusicStoreCore.Entities.OrderItem", b =>
@@ -312,6 +431,25 @@ namespace MusicStoreInfrastructure.Migrations
                     b.Navigation("ProductType");
                 });
 
+            modelBuilder.Entity("MusicStoreCore.Entities.Review", b =>
+                {
+                    b.HasOne("MusicStoreCore.Entities.Customer", "Customer")
+                        .WithMany("Reviews")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MusicStoreCore.Entities.Product", "Product")
+                        .WithMany("Reviews")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("MusicStoreCore.Entities.Stock", b =>
                 {
                     b.HasOne("MusicStoreCore.Entities.Product", "Product")
@@ -339,11 +477,18 @@ namespace MusicStoreInfrastructure.Migrations
             modelBuilder.Entity("MusicStoreCore.Entities.Customer", b =>
                 {
                     b.Navigation("Orders");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("MusicStoreCore.Entities.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("MusicStoreCore.Entities.Product", b =>
+                {
+                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }

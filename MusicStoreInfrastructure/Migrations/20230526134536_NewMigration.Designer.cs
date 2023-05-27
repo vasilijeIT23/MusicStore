@@ -12,8 +12,8 @@ using MusicStoreInfrastructure;
 namespace MusicStoreInfrastructure.Migrations
 {
     [DbContext(typeof(MusicStoreContext))]
-    [Migration("20230514172754_Migration1.3")]
-    partial class Migration13
+    [Migration("20230526134536_NewMigration")]
+    partial class NewMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,8 +92,16 @@ namespace MusicStoreInfrastructure.Migrations
                     b.Property<double>("MoneySpent")
                         .HasColumnType("float");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Role")
                         .HasColumnType("int");
+
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -101,33 +109,14 @@ namespace MusicStoreInfrastructure.Migrations
                     b.Property<DateTime?>("StatusExpirationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("0db56b78-d3e7-4d9f-aa7d-823bc58ead36"),
-                            Email = "marko@ds.com",
-                            FirstName = "Marko",
-                            LastName = "Markovic",
-                            MoneySpent = 0.0,
-                            Role = 1,
-                            Status = 1,
-                            StatusExpirationDate = new DateTime(2023, 2, 3, 19, 27, 54, 242, DateTimeKind.Local).AddTicks(2013)
-                        },
-                        new
-                        {
-                            Id = new Guid("7beb94ba-fc46-4c38-b93c-9b90fb512f0e"),
-                            Email = "vasilije.mucibabic@gmail.com",
-                            FirstName = "Vasilije",
-                            LastName = "Mucibabic",
-                            MoneySpent = 0.0,
-                            Role = 2,
-                            Status = 1,
-                            StatusExpirationDate = new DateTime(2023, 2, 3, 19, 27, 54, 242, DateTimeKind.Local).AddTicks(2102)
-                        });
                 });
 
             modelBuilder.Entity("MusicStoreCore.Entities.Order", b =>
@@ -142,12 +131,20 @@ namespace MusicStoreInfrastructure.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("PaymentCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("PaymentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("PaymentId");
 
                     b.ToTable("Orders");
                 });
@@ -174,6 +171,28 @@ namespace MusicStoreInfrastructure.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("MusicStoreCore.Entities.Payment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("MusicStoreCore.Entities.Product", b =>
@@ -224,31 +243,31 @@ namespace MusicStoreInfrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d53b0f4a-43c8-47f7-8c98-b9dadfc80ffb"),
+                            Id = new Guid("22e3bbba-903d-4f44-a9f9-dd96d5cf58ea"),
                             Category = 1,
                             Name = "Gitara"
                         },
                         new
                         {
-                            Id = new Guid("637b397c-6067-4d92-8349-b8bec5a5e502"),
+                            Id = new Guid("226afa6f-c8c2-4829-961e-509c1e9cd518"),
                             Category = 1,
                             Name = "Harmonika"
                         },
                         new
                         {
-                            Id = new Guid("e5a60428-440d-4937-82d3-d3060ed473d2"),
+                            Id = new Guid("b7708bd9-3e51-4db9-95a9-a9027b1c1926"),
                             Category = 1,
                             Name = "Flauta"
                         },
                         new
                         {
-                            Id = new Guid("771aee63-9224-4454-a09f-58f1c8a0dbf3"),
+                            Id = new Guid("e72cb1a7-dbaa-420c-b76c-fdb3d26c8402"),
                             Category = 1,
                             Name = "Zvucnik"
                         },
                         new
                         {
-                            Id = new Guid("462e0b5e-ee01-49c0-aee6-466de610ce36"),
+                            Id = new Guid("b7323db2-60c0-4b4a-8077-3fdc0a1ca8e2"),
                             Category = 1,
                             Name = "Pojacalo"
                         });
@@ -327,7 +346,7 @@ namespace MusicStoreInfrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e0080d55-9790-430e-9248-b716e4a60bdb"),
+                            Id = new Guid("493cf5d1-ba88-4bd9-9332-fd9e22577e8e"),
                             Capacity = 10000,
                             Name = "Warehouse_1"
                         });
@@ -371,7 +390,15 @@ namespace MusicStoreInfrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MusicStoreCore.Entities.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("MusicStoreCore.Entities.OrderItem", b =>

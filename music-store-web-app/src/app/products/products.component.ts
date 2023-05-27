@@ -1,19 +1,18 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { AddToCartCommand, CustomerClient, DeleteProductCommand, Product, ProductClient } from '../api/api-reference';
+import { Component, OnInit } from '@angular/core';
+import { DeleteProductCommand, Product, ProductClient } from '../api/api-reference';
 import { Router } from '@angular/router';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
-export class ProductsComponent implements OnInit{
+export class ProductsComponent implements OnInit {
   displayedColumns: string[] = ['name', 'inStock', 'price', 'actions'];
   id = localStorage.getItem('id');
+  role = localStorage.getItem('role');
 
   pageSize = 5;
   pageSizeOptions: number[] = [5, 10, 20];
@@ -29,15 +28,20 @@ export class ProductsComponent implements OnInit{
   products: Product[] = [];
 
   constructor(private productClient: ProductClient,
-    private customerClient: CustomerClient,
     private router: Router,
-    private snackBar: MatSnackBar) {} 
-  
+    private snackBar: MatSnackBar) { }
+
   ngOnInit() {
-    this.router.navigate([this.router.url]) 
+    this.router.navigate([this.router.url])
     this.productClient.getAll().subscribe(result => {
-      this.products = result;
-      this.totalItems = this.products.length;
+      if (result !== null) {
+        this.products = result;
+        this.totalItems = this.products.length;
+      }
+      else {
+        this.snackBar.open("Something went wrong");
+        console.error("Null response from server");
+      }
     });
   }
 
@@ -75,14 +79,11 @@ export class ProductsComponent implements OnInit{
     return this.products.slice(startIndex, endIndex);
   }
 
-  onAddToCart(product: Product){
-    this.customerClient.addToCart(new AddToCartCommand({
-      productId: product.id,
-      customerId: localStorage.getItem('id')!,
-      quantity: 1
-    })).subscribe(_ => {
-      this.snackBar.open('Added to cart');
-      this.router.navigate([`cart/${this.id}`]);
-    });
+  onAddToCart(productId: string) {
+    this.router.navigate([`add/to/cart/${productId}`]);
+  }
+
+  public createImgPath = (serverPath: string) => {
+    return `http://localhost:52720/${serverPath}`;
   }
 }

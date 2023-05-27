@@ -1,0 +1,19 @@
+<div class="payment-form-container">
+  <form id="payment-form" class="payment-form">
+    <div>
+      <label for="card-element">Card Details</label>
+      <div id="card-element">
+        <!-- Card element will be mounted here -->
+      </div>
+    </div>
+    <div>
+      <label for="currency">Currency</label>
+      <input type="text" id="currency" required>
+    </div>
+    <div>
+      <label for="description">Description</label>
+      <input type="text" id="description" required>
+    </div>
+    <button type="submit" (click)="handleSubmit($event)">Submit Payment</button>
+  </form>
+</div>

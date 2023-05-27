@@ -1,9 +1,12 @@
 using FluentAssertions.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using MusicStoreApi.Repository;
+using MusicStoreApi.Services;
 using MusicStoreCore.Entities;
 using MusicStoreInfrastructure;
 using System.Text;
@@ -30,6 +33,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddDbContext<MusicStoreContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MusicStore")));
 
+builder.Services.Configure<FormOptions>(o =>
+{
+    o.ValueLengthLimit = int.MaxValue;
+    o.MultipartBodyLengthLimit = int.MaxValue;
+    o.MemoryBufferThreshold = int.MaxValue;
+});
+
 builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
 builder.Services.AddScoped<IRepository<ProductType>, ProductTypeRepository>();
 builder.Services.AddScoped<IRepository<Customer>, CustomerRepository>();
@@ -37,9 +47,12 @@ builder.Services.AddScoped<IRepository<Cart>, CartRepository>();
 builder.Services.AddScoped<IRepository<CartItem>, CartItemRepository>();
 builder.Services.AddScoped<IRepository<Order>, OrderRepository>();
 builder.Services.AddScoped<IRepository<OrderItem>, OrderItemRepository>();
+builder.Services.AddScoped<IRepository<Payment>, PaymentRepository>();
 builder.Services.AddScoped<IRepository<Warehouse>, WarehouseRepository>();
 builder.Services.AddScoped<IRepository<Stock>, StockRepository>();
 builder.Services.AddScoped<IRepository<Review>, ReviewRepository>();
+
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -70,6 +83,13 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Progr
 var app = builder.Build();
 
 app.UseCors(AllowCors);
+
+app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+    RequestPath = new PathString("/Resources")
+});
 
 app.UseHttpsRedirection();
 

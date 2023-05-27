@@ -2,14 +2,14 @@
   <div class="form-field">
     <mat-form-field appearance="outline" class="styled-form-field">
       <mat-label>Name</mat-label>
-      <input matInput type="text" formControlName="name" class="styled-input">
+      <input matInput type="text" formControlName="name" class="styled-input" required>
     </mat-form-field>
   </div>
 
   <div class="form-field" *ngIf="!isCreate">
     <mat-form-field appearance="outline" class="styled-form-field">
       <mat-label>In Stock</mat-label>
-      <input matInput type="text" formControlName="inStock" class="styled-input">
+      <input matInput type="text" formControlName="inStock" class="styled-input" required>
     </mat-form-field>
   </div>
 
@@ -17,7 +17,7 @@
     <mat-form-field appearance="outline" class="styled-form-field">
       <mat-label for="productType">ProductType: </mat-label>
       <mat-select formControlName="productType">
-        <mat-option *ngFor="let productType of productTypes" [value]="productType.name" class="styled-input">
+        <mat-option *ngFor="let productType of productTypes" [value]="productType.name" class="styled-input" required>
           {{ productType.name }}
         </mat-option>
       </mat-select>
@@ -27,11 +27,27 @@
   <div class="form-field">
     <mat-form-field appearance="outline" class="styled-form-field">
       <mat-label>Price</mat-label>
-      <input matInput type="numeric" formControlName="price" class="styled-input">
+      <input matInput type="numeric" formControlName="price" class="styled-input" required>
     </mat-form-field>
+  </div>
+
+  <div class="form-field">
+    <div class="col-md-3">
+      <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" style="display:none;">
+      <button type="button" class="btn btn-success" (click)="file.click()">Upload File</button>
+    </div>
+    <div class="col-md-4">
+      <span class="upload" *ngIf="progress > 0">
+        {{progress}}%
+      </span>
+      <span class="upload" *ngIf="message">
+        {{message}}
+      </span>
+    </div>
   </div>
 
   <button mat-flat-button type="submit" [disabled]="formGroup.invalid" (click)="onSubmit()" class="styled-button">Submit</button>
 </form>
+
 
   

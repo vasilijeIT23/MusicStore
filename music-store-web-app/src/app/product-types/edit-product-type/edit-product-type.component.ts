@@ -31,33 +31,41 @@ export class EditProductTypeComponent {
     category: new FormControl<Category>(Category.Instrument, { nonNullable: true }),
   });
 
-  ngOnInit(){
+  ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') ?? undefined;
     if (this.id) {
-      this.client.getById(this.id).subscribe(data => this.patchForm(data));
-    }
-  }
-  onSubmit(){
-    if(this.id){
-      this.client.update(new UpdateProductTypeCommand({
-          id: this.formGroup.controls.id.value,
-          name: this.formGroup.controls.name.value,
-      })).subscribe(_ => {
-          this.snackBar.open('Product type updated');
-          this.router.navigate([`/productTypes/`]);
+      this.client.getById(this.id).subscribe(data => {
+        if (data !== null) {
+          this.patchForm(data)
+        }
+        else {
+          this.snackBar.open("Something went wrong");
+          console.error("Null response from server");
+        }
       });
     }
-  else{
+  }
+  onSubmit() {
+    if (this.id) {
+      this.client.update(new UpdateProductTypeCommand({
+        id: this.formGroup.controls.id.value,
+        name: this.formGroup.controls.name.value,
+      })).subscribe(_ => {
+        this.snackBar.open('Product type updated');
+        this.router.navigate([`/productTypes/`]);
+      });
+    }
+    else {
       this.client.create(new CreateProductTypeCommand({
         name: this.formGroup.controls.name.value,
         category: this.formGroup.controls.category.value
-    })).subscribe(_ => {
+      })).subscribe(_ => {
         this.snackBar.open('Product type created');
         this.router.navigate([`/productTypes/`]);
-    });
+      });
+    }
   }
-}
-  
+
   private readonly patchForm = (productType: ProductType) => {
     this.formGroup.controls.id.patchValue(this.id!);
     this.formGroup.controls.name.patchValue(productType.name!);

@@ -10,6 +10,7 @@ import { CreateWarehouseCommand, UpdateWarehouseCommand, Warehouse, WarehouseCli
   templateUrl: './edit-warehouse.component.html',
   styleUrls: ['./edit-warehouse.component.css']
 })
+
 export class EditWarehouseComponent {
   constructor(private route: ActivatedRoute,
     private client: WarehouseClient,
@@ -25,34 +26,42 @@ export class EditWarehouseComponent {
     capacity: new FormControl(0, { nonNullable: true }),
   });
 
-  ngOnInit(){
+  ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id') ?? undefined;
     if (this.id) {
-      this.client.getById(this.id).subscribe(data => this.patchForm(data));
-    }
-  }
-  onSubmit(){
-    if(this.id){
-      this.client.update(new UpdateWarehouseCommand({
-          id: this.formGroup.controls.id.value,
-          name: this.formGroup.controls.name.value,
-          capacity: this.formGroup.controls.capacity.value
-      })).subscribe(_ => {
-          this.snackBar.open('Warehouse updated');
-          this.router.navigate([`/warehouses/`]);
+      this.client.getById(this.id).subscribe(data => {
+        if (data !== null) {
+          this.patchForm(data)
+        }
+        else {
+          this.snackBar.open("Something went wrong");
+          console.error("Null response from server");
+        }
       });
     }
-  else{
+  }
+  onSubmit() {
+    if (this.id) {
+      this.client.update(new UpdateWarehouseCommand({
+        id: this.formGroup.controls.id.value,
+        name: this.formGroup.controls.name.value,
+        capacity: this.formGroup.controls.capacity.value
+      })).subscribe(_ => {
+        this.snackBar.open('Warehouse updated');
+        this.router.navigate([`/warehouses/`]);
+      });
+    }
+    else {
       this.client.create(new CreateWarehouseCommand({
         name: this.formGroup.controls.name.value,
         capacity: this.formGroup.controls.capacity.value
-    })).subscribe(_ => {
+      })).subscribe(_ => {
         this.snackBar.open('Warehouse created');
         this.router.navigate([`/warehouses/`]);
-    });
+      });
+    }
   }
-}
-  
+
   private readonly patchForm = (warehouse: Warehouse) => {
     this.formGroup.controls.id.patchValue(this.id!);
     this.formGroup.controls.name.patchValue(warehouse.name!);

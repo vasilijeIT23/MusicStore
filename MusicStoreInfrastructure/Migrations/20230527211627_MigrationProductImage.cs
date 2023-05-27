@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MusicStoreInfrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Migration15 : Migration
+    public partial class MigrationProductImage : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,58 +16,56 @@ namespace MusicStoreInfrastructure.Migrations
             migrationBuilder.DeleteData(
                 table: "ProductTypes",
                 keyColumn: "Id",
-                keyValue: new Guid("51336115-4669-42ac-a1bd-ca7352b83b76"));
+                keyValue: new Guid("0e34649d-a8cd-47c4-8400-6259d183f05c"));
 
             migrationBuilder.DeleteData(
                 table: "ProductTypes",
                 keyColumn: "Id",
-                keyValue: new Guid("650af2d4-7c7a-44b3-b875-931cc3b0e919"));
+                keyValue: new Guid("14350249-069c-455a-8ac5-2527edfdaa03"));
 
             migrationBuilder.DeleteData(
                 table: "ProductTypes",
                 keyColumn: "Id",
-                keyValue: new Guid("a444d554-17cf-42f1-8375-65895a4d791f"));
+                keyValue: new Guid("2b735c00-19b8-4921-851e-0de5cb693d9c"));
 
             migrationBuilder.DeleteData(
                 table: "ProductTypes",
                 keyColumn: "Id",
-                keyValue: new Guid("f9bf7848-214b-477e-9d7e-5e767344f54f"));
+                keyValue: new Guid("6ce08fe2-2eed-4b53-a8e0-47e14148fa6b"));
 
             migrationBuilder.DeleteData(
                 table: "ProductTypes",
                 keyColumn: "Id",
-                keyValue: new Guid("fca1b053-dd27-4633-bf19-bd6e6f54f037"));
+                keyValue: new Guid("ba509490-218d-4e30-aafa-883ed4253347"));
 
             migrationBuilder.DeleteData(
                 table: "Warehouses",
                 keyColumn: "Id",
-                keyValue: new Guid("f065aab1-c6e9-4ab1-8d06-aba1371dd049"));
+                keyValue: new Guid("fd569164-65d1-429b-8936-b53ebbd4edd3"));
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Salt",
-                table: "Customers",
+            migrationBuilder.AddColumn<string>(
+                name: "ImagePath",
+                table: "Products",
                 type: "nvarchar(max)",
                 nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(35)",
-                oldMaxLength: 35);
+                defaultValue: "");
 
             migrationBuilder.InsertData(
                 table: "ProductTypes",
                 columns: new[] { "Id", "Category", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("30b2a35c-429b-476f-bc6a-ab3f618fdda0"), 1, "Zvucnik" },
-                    { new Guid("58822232-3534-446c-8649-0db7c62efdae"), 1, "Harmonika" },
-                    { new Guid("5f5f7cff-68d5-466a-a8d6-654ce77c9ac7"), 1, "Pojacalo" },
-                    { new Guid("9adc6fc6-4d6d-4695-bb5e-dc68c6bfc04c"), 1, "Gitara" },
-                    { new Guid("db5d5cdb-1ccc-4bfc-9c07-5584b121e202"), 1, "Flauta" }
+                    { new Guid("295e4242-a1d7-42a5-9936-3fe65207d081"), 1, "Zvucnik" },
+                    { new Guid("5f1ff512-a2c7-4f3f-93c0-e173fac3b067"), 1, "Pojacalo" },
+                    { new Guid("62fde825-88b7-47be-98a2-a05fd00eb0f0"), 1, "Gitara" },
+                    { new Guid("a5c10ce5-9d31-42bb-b0cc-b49da615ca25"), 1, "Harmonika" },
+                    { new Guid("f5c5a94a-a85d-471f-9aa5-50681b1b0f9e"), 1, "Flauta" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Warehouses",
                 columns: new[] { "Id", "Capacity", "Name" },
-                values: new object[] { new Guid("1e63806d-e978-458f-8a4a-1ea03ed5044f"), 10000, "Warehouse_1" });
+                values: new object[] { new Guid("7923c506-1780-4b4b-a14a-454a058ce745"), 10000, "Warehouse_1" });
         }
 
         /// <inheritdoc />
@@ -76,58 +74,53 @@ namespace MusicStoreInfrastructure.Migrations
             migrationBuilder.DeleteData(
                 table: "ProductTypes",
                 keyColumn: "Id",
-                keyValue: new Guid("30b2a35c-429b-476f-bc6a-ab3f618fdda0"));
+                keyValue: new Guid("295e4242-a1d7-42a5-9936-3fe65207d081"));
 
             migrationBuilder.DeleteData(
                 table: "ProductTypes",
                 keyColumn: "Id",
-                keyValue: new Guid("58822232-3534-446c-8649-0db7c62efdae"));
+                keyValue: new Guid("5f1ff512-a2c7-4f3f-93c0-e173fac3b067"));
 
             migrationBuilder.DeleteData(
                 table: "ProductTypes",
                 keyColumn: "Id",
-                keyValue: new Guid("5f5f7cff-68d5-466a-a8d6-654ce77c9ac7"));
+                keyValue: new Guid("62fde825-88b7-47be-98a2-a05fd00eb0f0"));
 
             migrationBuilder.DeleteData(
                 table: "ProductTypes",
                 keyColumn: "Id",
-                keyValue: new Guid("9adc6fc6-4d6d-4695-bb5e-dc68c6bfc04c"));
+                keyValue: new Guid("a5c10ce5-9d31-42bb-b0cc-b49da615ca25"));
 
             migrationBuilder.DeleteData(
                 table: "ProductTypes",
                 keyColumn: "Id",
-                keyValue: new Guid("db5d5cdb-1ccc-4bfc-9c07-5584b121e202"));
+                keyValue: new Guid("f5c5a94a-a85d-471f-9aa5-50681b1b0f9e"));
 
             migrationBuilder.DeleteData(
                 table: "Warehouses",
                 keyColumn: "Id",
-                keyValue: new Guid("1e63806d-e978-458f-8a4a-1ea03ed5044f"));
+                keyValue: new Guid("7923c506-1780-4b4b-a14a-454a058ce745"));
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Salt",
-                table: "Customers",
-                type: "nvarchar(35)",
-                maxLength: 35,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+            migrationBuilder.DropColumn(
+                name: "ImagePath",
+                table: "Products");
 
             migrationBuilder.InsertData(
                 table: "ProductTypes",
                 columns: new[] { "Id", "Category", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("51336115-4669-42ac-a1bd-ca7352b83b76"), 1, "Zvucnik" },
-                    { new Guid("650af2d4-7c7a-44b3-b875-931cc3b0e919"), 1, "Harmonika" },
-                    { new Guid("a444d554-17cf-42f1-8375-65895a4d791f"), 1, "Pojacalo" },
-                    { new Guid("f9bf7848-214b-477e-9d7e-5e767344f54f"), 1, "Gitara" },
-                    { new Guid("fca1b053-dd27-4633-bf19-bd6e6f54f037"), 1, "Flauta" }
+                    { new Guid("0e34649d-a8cd-47c4-8400-6259d183f05c"), 1, "Harmonika" },
+                    { new Guid("14350249-069c-455a-8ac5-2527edfdaa03"), 1, "Zvucnik" },
+                    { new Guid("2b735c00-19b8-4921-851e-0de5cb693d9c"), 1, "Gitara" },
+                    { new Guid("6ce08fe2-2eed-4b53-a8e0-47e14148fa6b"), 1, "Pojacalo" },
+                    { new Guid("ba509490-218d-4e30-aafa-883ed4253347"), 1, "Flauta" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Warehouses",
                 columns: new[] { "Id", "Capacity", "Name" },
-                values: new object[] { new Guid("f065aab1-c6e9-4ab1-8d06-aba1371dd049"), 10000, "Warehouse_1" });
+                values: new object[] { new Guid("fd569164-65d1-429b-8936-b53ebbd4edd3"), 10000, "Warehouse_1" });
         }
     }
 }

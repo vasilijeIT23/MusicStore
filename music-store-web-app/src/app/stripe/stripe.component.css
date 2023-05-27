@@ -1,0 +1,39 @@
+.payment-form-container {
+  width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.payment-form {
+  margin-top: 20px;
+}
+
+.payment-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.payment-form input[type="number"],
+.payment-form input[type="text"] {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.payment-form button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #4285F4;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.payment-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

@@ -39,7 +39,14 @@ import { EditProductTypeComponent } from './product-types/edit-product-type/edit
 import { EditStockComponent } from './stock/edit-stock/edit-stock.component';
 import { ProfileComponent } from './profile/profile.component';
 import { OrdersComponent } from './orders/orders.component';
-import {MatSortModule} from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
+import { StripeComponent } from './stripe/stripe.component';
+import { NgLetModule } from 'ng-let';
+import { CreateStockComponent } from './stock/create-stock/create-stock.component';
+import { PaymentsComponent } from './payments/payments.component';
+import { OrderService } from './services/order.service';
+import { AddToCartComponent } from './products/add-to-cart/add-to-cart.component';
+import { UpdateCredentialsComponent } from './profile/update-credentials/update-credentials.component';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -47,7 +54,6 @@ export class TokenInterceptor implements HttpInterceptor {
     const token = localStorage.getItem('token');
 
     if (token) {
-      // Clone the request and add the token to the 'Authorization' header
       const authRequest = request.clone({
         headers: request.headers.set('Authorization', `Bearer ${token}`)
       });
@@ -78,6 +84,11 @@ export class TokenInterceptor implements HttpInterceptor {
     EditStockComponent,
     ProfileComponent,
     OrdersComponent,
+    StripeComponent,
+    CreateStockComponent,
+    PaymentsComponent,
+    AddToCartComponent,
+    UpdateCredentialsComponent,
   ],
   imports: [
     BrowserModule,
@@ -102,11 +113,13 @@ export class TokenInterceptor implements HttpInterceptor {
     MatOptionModule,
     MatDialogModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    NgLetModule
   ],
   providers: [
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    OrderService
   ],
   bootstrap: [AppComponent]
 })
