@@ -1,7 +1,6 @@
 import { Component , OnInit} from '@angular/core';
-import { Order, OrderClient } from '../api/api-reference';
+import { Order } from '../api/api-reference';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { OrderService } from '../services/order.service';
 
 @Component({
@@ -20,10 +19,8 @@ export class OrdersComponent implements OnInit {
   showItems: boolean = false;
   hideItems: boolean = false;
 
-  constructor(private orderClient: OrderClient,
-    private router: Router,
+  constructor(private router: Router,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar,
     private orderService: OrderService) {}
 
 
@@ -33,8 +30,7 @@ export class OrdersComponent implements OnInit {
     {
       this.orderService.getOrders().subscribe(
         (orders: any) => {
-          this.orders = orders.filter((order: { customer: { id: string | undefined; }; }) => order?.customer?.id === this.id);
-        },
+          this.orders = orders.filter((order: { customer: { id: string | undefined; }; }) => order?.customer?.id === this.id);        },
         (error: any) => {
           console.error('Failed to retrieve orders:', error);
         }
@@ -54,7 +50,6 @@ export class OrdersComponent implements OnInit {
 
   getOrderItemsValues(order: any): any[] {
     if (order.orderItems && order.orderItems["$values"]) {
-      console.log(order.orderItems["$values"]);
       return order.orderItems['$values'];
     }
     return [];
@@ -73,5 +68,9 @@ export class OrdersComponent implements OnInit {
 
   allOrders(){
     this.router.navigate([`orders`]);
+  }
+
+  myOrders(){
+    this.router.navigate([`orders/${localStorage.getItem('id')}`]);
   }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Cart, CartClient, CartItem, CustomerClient, EmptyCartCommand, PromoteCustomerCommand, PurchaseFromCartCommand, RemoveCartItemCommand, StripeApiClient } from '../api/api-reference';
+import { Cart, CartClient, CartItem, CustomerClient, EmptyCartCommand, RemoveCartItemCommand } from '../api/api-reference';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -17,7 +17,6 @@ export class CartComponent {
   id: string | undefined;
 
   constructor(private cartClient: CartClient,
-    private stripeClient: StripeApiClient,
     private customerClient: CustomerClient,
     private router: Router,
     private route: ActivatedRoute,
