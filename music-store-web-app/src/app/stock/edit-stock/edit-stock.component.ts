@@ -39,13 +39,26 @@ export class EditStockComponent {
     }
   }
   onSubmit() {
-    this.client.update(new UpdateStockCommand({
-      id: this.formGroup.controls.id.value,
-      quantity: this.formGroup.controls.quantity.value
-    })).subscribe(_ => {
-      this.snackBar.open('Stock updated');
-      this.router.navigate([`/stock/`]);
-    });
+    if (this.formGroup.controls.quantity.value !== null || 
+      typeof(this.formGroup.controls.quantity.value) !== "number") {
+      this.client.update(new UpdateStockCommand({
+        id: this.formGroup.controls.id.value,
+        quantity: this.formGroup.controls.quantity.value
+      })).subscribe(result => {
+        if (result !== null) {
+          this.snackBar.open('Stock updated');
+          this.router.navigate([`/stock/`]);
+        }
+        else {
+          this.snackBar.open("Something went wrong");
+          console.error("Null response from server");
+        }
+      });
+    }
+    else {
+      this.snackBar.open("Please insert valid data");
+      console.error("Invalid input data");
+    }
   }
 
   private readonly patchForm = (stock: Stock) => {

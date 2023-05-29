@@ -43,6 +43,11 @@ namespace MusicStoreApi.Handlers.Stocks.Commands
                     throw new InvalidInputValueException();
                 }
 
+                if(request.Quantity.GetType() != typeof(int)) 
+                {
+                    throw new InvalidInputValueException();
+                }
+
                 var stock = _repository.GetById(request.Id);
 
                 if (stock == null)

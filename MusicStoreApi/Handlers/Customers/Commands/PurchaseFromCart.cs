@@ -25,9 +25,11 @@ namespace MusicStoreApi.Handlers.Customers.Commands
             private readonly IRepository<CartItem> _cartItemRepository;
             private readonly IRepository<Stock> _stockRepository;
             private readonly IRepository<Warehouse> _warehouseRepository;
+            private readonly IRepository<Product> _productRepository;
 
             public RequestHandler(IRepository<CartItem> cartItemRepository, IRepository<Customer> customerRepository, IRepository<Order> orderRepository, 
-                IRepository<OrderItem> orderItemRepository, IRepository<Cart> cartRepository, IRepository<Stock> stockRepository, IRepository<Warehouse> warehouseRepository)
+                IRepository<OrderItem> orderItemRepository, IRepository<Cart> cartRepository, IRepository<Stock> stockRepository, 
+                IRepository<Warehouse> warehouseRepository, IRepository<Product> productRepository)
             {
                 _cartItemRepository = cartItemRepository ?? throw new ArgumentNullException(nameof(cartItemRepository));
                 _cartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
@@ -36,6 +38,7 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                 _orderItemRepository = orderItemRepository ?? throw new ArgumentNullException(nameof(orderItemRepository));
                 _stockRepository = stockRepository ?? throw new ArgumentNullException(nameof(stockRepository));
                 _warehouseRepository = warehouseRepository ?? throw new ArgumentNullException(nameof(warehouseRepository));
+                _productRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
             }
             public Task<Order> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -60,8 +63,6 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                     throw new RequirementsNotSatisfiedException();
                 }
 
-
-
                 double orderPrice = 0;
                 double discount = 1;
                 var order = new Order(customer);
@@ -71,6 +72,15 @@ namespace MusicStoreApi.Handlers.Customers.Commands
                 {
                     var stock = _stockRepository.Find(x => x.Product.Id == item.Product.Id).FirstOrDefault();
                     stock.Quantity -= item.Quantity;
+
+                    if(stock.Quantity == 0)
+                    {
+                        var product = _productRepository.GetById(stock.Product.Id);
+                        if(product != null)
+                        {
+                            product.InStock = false;
+                        }
+                    }
 
                     var warehouse = _warehouseRepository.Find(x => x.Id == stock.Warehouse.Id).SingleOrDefault();
                     warehouse.Capacity += item.Quantity;

@@ -7,7 +7,7 @@ import {
 } from '../api/api-reference';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-stripe',
@@ -22,14 +22,24 @@ export class StripeComponent implements OnInit {
 
   stripeCustomer: Customer2 | null = null;
 
+  paymentForm: FormGroup;
+
   constructor(
     private cartClient: CartClient,
     private stripeClient: StripeApiClient,
     private customerClient: CustomerClient,
     private router: Router,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar
-  ) { }
+    private snackBar: MatSnackBar,
+    private formBuilder: FormBuilder
+  ) { 
+    this.paymentForm = this.formBuilder.group({
+      currency: ['usd', { nonNullable: true }, Validators.required],
+      description: ['', { nonNullable: true }, Validators.required]
+    });
+  }
+
+  allowedCurrencies: string[] = ['usd', 'eur', 'gbp'];
 
   ngOnInit() {
     this.loadStripeLibrary();
@@ -60,16 +70,15 @@ export class StripeComponent implements OnInit {
       return;
     }
     try {
-
+      
+      const forms = this.paymentForm;
       const form = document.getElementById('payment-form') as HTMLFormElement;
       const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
       submitButton.disabled = true;
 
-      const currencyInput = document.getElementById('currency') as HTMLInputElement;
-      const currency = currencyInput.value;
 
-      const descriptionInput = document.getElementById('description') as HTMLInputElement;
-      const description = descriptionInput.value;
+      const currency = forms['controls']['currency'].value;
+      const description = forms['controls']['description'].value;
 
       this.stripeClient.createStripeCustomer(new CreateStripeCustomerCommand({
         customerId: this.customerId!,
@@ -132,5 +141,10 @@ export class StripeComponent implements OnInit {
     catch (error) {
       console.error('Error processing payment:', error);
     }
+  }
+
+  checkValueInArray(value: string): boolean {
+    const stringArray: string[] = ['usd', 'eur', 'gbp'];
+    return stringArray.includes(value);
   }
 }

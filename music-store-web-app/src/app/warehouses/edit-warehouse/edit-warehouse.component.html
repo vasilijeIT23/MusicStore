@@ -3,6 +3,7 @@
       <mat-form-field appearance="outline" class="styled-form-field">
         <mat-label>Name</mat-label>
         <input matInput type="text" formControlName="name" class="styled-input" required>
+        <mat-error *ngIf="formGroup.controls.name.errors">Invalid input.</mat-error>
       </mat-form-field>
     </div>
   
@@ -10,6 +11,7 @@
       <mat-form-field appearance="outline" class="styled-form-field">
         <mat-label>Capacity</mat-label>
         <input matInput type="number" formControlName="capacity" class="styled-input" required>
+        <mat-error *ngIf="formGroup.controls.capacity.errors">Capacity must be a number.</mat-error>
       </mat-form-field>
     </div>
 

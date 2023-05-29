@@ -34,7 +34,6 @@ export class EditProductComponent {
   formGroup = new FormGroup({
     id: new FormControl('', { nonNullable: true }),
     name: new FormControl('', { nonNullable: true }),
-    inStock: new FormControl(false, { nonNullable: true }),
     productType: new FormControl('', { nonNullable: true }),
     price: new FormControl(0, { nonNullable: true }),
   });
@@ -63,8 +62,8 @@ export class EditProductComponent {
       this.productClient.update(new UpdateProductCommand({
         id: this.formGroup.controls.id.value,
         name: this.formGroup.controls.name.value,
-        inStock: this.formGroup.controls.inStock.value,
         price: this.formGroup.controls.price.value,
+        imagePath: this.pathToImage
       })).subscribe(_ => {
         this.snackBar.open('Product updated');
         this.router.navigate([`/products/`]);
@@ -87,7 +86,6 @@ export class EditProductComponent {
   private readonly patchForm = (product: Product) => {
     this.formGroup.controls.id.patchValue(this.id!);
     this.formGroup.controls.name.patchValue(product.name!);
-    this.formGroup.controls.inStock.patchValue(product.inStock!);
     this.formGroup.controls.price.patchValue(product.price!);
   }
 

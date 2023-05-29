@@ -4863,8 +4863,8 @@ export interface ICreateProductCommand {
 export class UpdateProductCommand implements IUpdateProductCommand {
     id?: string;
     name?: string;
-    inStock?: boolean;
     price?: number;
+    imagePath?: string;
 
     constructor(data?: IUpdateProductCommand) {
         if (data) {
@@ -4879,8 +4879,8 @@ export class UpdateProductCommand implements IUpdateProductCommand {
         if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
-            this.inStock = _data["inStock"];
             this.price = _data["price"];
+            this.imagePath = _data["imagePath"];
         }
     }
 
@@ -4895,8 +4895,8 @@ export class UpdateProductCommand implements IUpdateProductCommand {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["name"] = this.name;
-        data["inStock"] = this.inStock;
         data["price"] = this.price;
+        data["imagePath"] = this.imagePath;
         return data;
     }
 }
@@ -4904,8 +4904,8 @@ export class UpdateProductCommand implements IUpdateProductCommand {
 export interface IUpdateProductCommand {
     id?: string;
     name?: string;
-    inStock?: boolean;
     price?: number;
+    imagePath?: string;
 }
 
 export class DeleteProductCommand implements IDeleteProductCommand {

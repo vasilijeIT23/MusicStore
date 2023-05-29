@@ -6,13 +6,6 @@
     </mat-form-field>
   </div>
 
-  <div class="form-field" *ngIf="!isCreate">
-    <mat-form-field appearance="outline" class="styled-form-field">
-      <mat-label>In Stock</mat-label>
-      <input matInput type="text" formControlName="inStock" class="styled-input" required>
-    </mat-form-field>
-  </div>
-
   <div class="form-field" *ngIf="isCreate">
     <mat-form-field appearance="outline" class="styled-form-field">
       <mat-label for="productType">ProductType: </mat-label>
@@ -28,13 +21,14 @@
     <mat-form-field appearance="outline" class="styled-form-field">
       <mat-label>Price</mat-label>
       <input matInput type="numeric" formControlName="price" class="styled-input" required>
+      <mat-error *ngIf="formGroup.controls.price.errors">Price must be a number.</mat-error>
     </mat-form-field>
   </div>
 
   <div class="form-field">
     <div class="col-md-3">
       <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" style="display:none;">
-      <button type="button" class="btn btn-success" (click)="file.click()">Upload File</button>
+      <button mat-raised-button type="button" class="btn btn-success" (click)="file.click()">Upload File</button>
     </div>
     <div class="col-md-4">
       <span class="upload" *ngIf="progress > 0">

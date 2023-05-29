@@ -14,8 +14,8 @@ namespace MusicStoreApi.Handlers.Products.Commands
         {
             public Guid Id { get; set; }
             public string Name { get; set; } = string.Empty;
-            public bool InStock { get; set; }
             public double Price { get; set; }
+            public string ImagePath { get; set; } = string.Empty;
         }
 
         [UsedImplicitly]

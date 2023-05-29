@@ -1,5 +1,5 @@
 .payment-form-container {
-  width: 400px;
+  width: 500px;
   margin: 50px auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -11,13 +11,35 @@
   margin-top: 20px;
 }
 
+.form-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-field {
+  padding-bottom: 20px;
+  width: 100%;
+  padding-right: 10px;
+}
+
+.currency {
+  height: 44px;
+}
+
+.card-field {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+}
+
 .payment-form label {
   display: block;
   margin-bottom: 5px;
 }
 
 .payment-form input[type="number"],
-.payment-form input[type="text"] {
+.payment-form input[type="text"],
+.payment-form mat-form-field {
   width: 100%;
   padding: 5px;
   margin-bottom: 10px;

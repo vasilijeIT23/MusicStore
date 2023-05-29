@@ -51,15 +51,25 @@ export class CartComponent {
   }
 
   emptyCart() {
-    this.customerClient.emptyCart(new EmptyCartCommand({
-      customerId: this.id
-    })).subscribe(_ => {
-      this.snackBar.open("Cart emptied successfully");
-      this.router.navigate([this.router.url]);
-    });
+    if (this.cart[0].cartItems?.length! > 0) {
+      this.customerClient.emptyCart(new EmptyCartCommand({
+        customerId: this.id
+      })).subscribe(_ => {
+        this.snackBar.open("Cart emptied successfully");
+        this.router.navigate([this.router.url]);
+      });
+    }
+    else {
+      this.snackBar.open("Cart is empty");
+    }
   }
 
   onCheckout() {
-    this.router.navigate([`stripe`]);
+    if (this.cart[0].cartItems?.length! > 0) {
+      this.router.navigate([`stripe`]);
+    }
+    else {
+      this.snackBar.open("Cart is empty");
+    }
   }
 }
